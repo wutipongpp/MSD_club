@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="th">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MSD Club — ดูโพสต์</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" href="/static/picture/MSD.jpg">
+    <style>
+    :root{ --red:#c70707; --blue:#2d32c7; --yellow:#FDC500; --bg:#FAFAFA; }
+    body{ background:var(--bg); }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen text-slate-900 bg-[var(--bg)]">
+    <!-- HEADER -->
+    <header class="sticky top-0 z-50 border-b text-white"
+            style="background:linear-gradient(90deg,var(--red),var(--blue))">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+        <a href="/" class="flex items-center gap-3">
+            <span class="w-10 h-10 rounded-xl overflow-hidden">
+            <img src="/static/picture/MSD.jpg" alt="icon" class="w-full h-full object-cover" />
+            </span>
+            <div class="hidden md:block">
+            <div class="text-lg font-extrabold tracking-wide">MSD Club</div>
+            <div class="text-xs opacity-90">Math · Stat · Data Science</div>
+            </div>
+        </a>
+        <nav class="flex gap-1">
+            <a class="px-3 py-2 rounded-lg hover:bg-white/10" href="/">หน้าหลัก</a>
+            <a class="px-3 py-2 rounded-lg hover:bg-white/10" href="/alumni">นิสิตเก่า</a>
+            <a class="px-3 py-2 rounded-lg hover:bg-white/10 bg-white/10" href="/announcements">ประชาสัมพันธ์</a>
+        </nav>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="max-w-4xl mx-auto px-4 my-10 flex-1">
+    <div id="postBox" class="card overflow-hidden">
+      <div id="postImage" class="bg-gray-100 flex items-center justify-center">
+        <span class="text-gray-400 text-sm">ไม่มีรูปภาพ</span>
+      </div>
+      <div class="p-6">
+        <h1 id="postTitle" class="text-3xl font-extrabold text-blue-950 mb-3">หัวข้อโพสต์</h1>
+        <div id="postContent" class="text-gray-700 leading-relaxed whitespace-pre-line">
+          เนื้อหาโพสต์
+        </div>
+        <div id="postDate" class="text-xs text-gray-500 mt-4 text-right"></div>
+      </div>
+    </div>
+        <section class="max-w-6xl mx-auto px-4 mt-8 mb-12">
+        <h3 class="text-2xl font-extrabold text-blue-950 mb-4 border-b-2 border-blue-200 inline-block pb-1">
+            📰 ประชาสัมพันธ์ล่าสุด
+        </h3>
+        <div id="latest" class="grid md:grid-cols-3 gap-6"></div>
+        </section>
+  </main>
+
+        
+
+    <!-- FOOTER -->
+    <footer class="mt-auto text-white text-sm"
+            style="background:linear-gradient(90deg,var(--blue),var(--red))">
+        <div class="max-w-6xl mx-auto px-4 py-6 text-center">
+        © <span id="y"></span> MSD Club
+        </div>
+    </footer>
+
+<script>
+    // ✅ ตรวจสอบว่าผู้ใช้เป็นแอดมินหรือไม่
+    const isAdmin = JSON.parse(localStorage.getItem('msd:isAdmin') || 'false');
+
+    if (isAdmin) {
+        // หาปุ่มนำทาง (navbar)
+        const nav = document.querySelector('nav');
+
+        // ✅ สร้างปุ่ม "แอดมิน"
+        const adminLink = document.createElement('a');
+        adminLink.href = "/admin"; // ← ไปหน้าแอดมินของคุณ
+        adminLink.textContent = "⚙️ แอดมิน";
+        adminLink.className = "px-3 py-2 rounded-lg bg-yellow-400 text-blue-950 font-bold hover:bg-yellow-300 transition";
+
+        // ✅ แทรกไว้ท้าย nav
+        nav.appendChild(adminLink);
+    }
+</script>
+
+    <script>
+  // 🧭 ดึง ID ของโพสต์จาก URL
+  const postId = parseInt(window.location.pathname.split('/').pop());
+  const postBox = document.getElementById('postBox');
+  const imgBox = document.getElementById('postImage');
+  const titleEl = document.getElementById('postTitle');
+  const contentEl = document.getElementById('postContent');
+  const dateEl = document.getElementById('postDate');
+  const latest = document.getElementById('latest');
+
+  // 📅 ใส่ปี footer
+  document.getElementById('y').textContent = new Date().getFullYear();
+
+  // 📡 โหลดโพสต์จาก Flask API
+  async function loadPost() {
+    try {
+      const res = await fetch('/api/posts');
+      if (!res.ok) throw new Error('โหลดโพสต์ไม่ได้');
+      const posts = await res.json();
+
+      // ค้นหาโพสต์ที่ต้องการ
+      const post = posts.find(p => p.id === postId);
+      if (!post) {
+        postBox.innerHTML = `<div class="p-6 text-center text-gray-500">ไม่พบโพสต์นี้</div>`;
+        return;
+      }
+
+      // แสดงภาพ (auto size)
+      imgBox.innerHTML = '';
+      if (post.image) {
+        const img = new Image();
+        img.src = post.image;
+        img.className = "w-full h-auto block object-contain rounded-xl";
+        imgBox.appendChild(img);
+      } else {
+        imgBox.innerHTML = `<div class="w-full bg-gray-100 flex items-center justify-center text-gray-400 py-20">ไม่มีรูปภาพ</div>`;
+      }
+
+      // ตั้งชื่อ / เนื้อหา / วันที่
+      titleEl.textContent = post.title || '(ไม่มีหัวข้อ)';
+      contentEl.textContent = post.content || '';
+      const date = new Date(post.created_at || post.updated_at);
+      dateEl.textContent = `โพสต์เมื่อ ${date.toLocaleString('th-TH', { dateStyle: 'long', timeStyle: 'short' })}`;
+
+      // โหลดโพสต์ล่าสุด (ยกเว้นอันนี้)
+      renderLatest(posts.filter(p => p.id !== postId));
+    } catch (err) {
+      console.error(err);
+      postBox.innerHTML = `<div class="p-6 text-center text-red-500">❌ โหลดโพสต์ไม่สำเร็จ</div>`;
+    }
+  }
+
+  // 📰 แสดงโพสต์อื่น ๆ ล่าสุด (3 อัน)
+  function renderLatest(posts) {
+    latest.innerHTML = '';
+    if (!posts.length) {
+      latest.innerHTML = `<div class="text-gray-500 text-center py-10">ยังไม่มีโพสต์ประชาสัมพันธ์</div>`;
+      return;
+    }
+
+    posts
+      .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+      .slice(0, 3)
+      .forEach(p => {
+        const wrap = document.createElement('a');
+        wrap.href = `/post/${p.id}`;
+        wrap.className = `
+          group block rounded-2xl overflow-hidden bg-white shadow-md hover:shadow-xl 
+          hover:-translate-y-1 border border-gray-200 transition-all duration-300
+        `;
+
+        const img = p.image
+          ? `<div class="aspect-video relative overflow-hidden">
+                <img src="${p.image}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                <div class="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-30 transition"></div>
+             </div>`
+          : `<div class="aspect-video bg-gray-100 flex items-center justify-center text-gray-400">ไม่มีรูป</div>`;
+
+        wrap.innerHTML = `
+          ${img}
+          <div class="p-4">
+            <div class="font-semibold text-blue-950 text-lg mb-1 group-hover:text-blue-600 transition">
+              ${p.title}
+            </div>
+            <div class="text-sm text-gray-600 leading-snug">
+              ${(p.content || '').slice(0, 90)}${(p.content || '').length > 90 ? '…' : ''}
+            </div>
+            <div class="mt-3 text-xs text-gray-400 flex items-center gap-1">
+              🕓 ${new Date(p.created_at).toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric' })}
+            </div>
+          </div>`;
+        latest.appendChild(wrap);
+      });
+  }
+
+  // 🚀 เริ่มโหลดเมื่อหน้าเว็บพร้อม
+  document.addEventListener('DOMContentLoaded', loadPost);
+</script>
+
+</body>
+
+</body>
+</html>

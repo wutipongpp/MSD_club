@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="th">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MSD Club — ประชาสัมพันธ์</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" href="/static/picture/MSD.jpg">
+    <style>
+        :root {
+        --red: #c70707;
+        --blue: #2d32c7;
+        --yellow: #FDC500;
+        --bg: #FAFAFA;
+        }
+        body { background: var(--bg); }
+        .card { border-radius: 1rem; border: 1px solid #e5e7eb; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    </style>
+    </head>
+
+    <body class="flex flex-col min-h-screen text-slate-900 bg-[var(--bg)]">
+    <!-- ✅ Navbar -->
+    <header class="sticky top-0 z-50 border-b text-white" style="background:linear-gradient(90deg,var(--red),var(--blue))">
+        <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+        <a href="/" class="flex items-center gap-3">
+            <span class="w-10 h-10 rounded-xl overflow-hidden">
+            <img src="/static/picture/MSD.jpg" alt="icon" class="w-full h-full object-cover">
+            </span>
+            <div class="hidden md:block">
+            <div class="text-lg font-extrabold tracking-wide">MSD Club</div>
+            <div class="text-xs opacity-90">Math · Stat · Data Science</div>
+            </div>
+        </a>
+        <nav class="flex gap-1">
+            <a class="px-3 py-2 rounded-lg hover:bg-white/10" href="/">หน้าหลัก</a>
+            <a class="px-3 py-2 rounded-lg hover:bg-white/10" href="/alumni">นิสิตเก่า</a>
+            <a class="px-3 py-2 rounded-lg bg-white/10" href="/announcements">ประชาสัมพันธ์</a>
+        </nav>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 my-8 flex-1">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <h2 class="text-3xl font-extrabold text-blue-950">ประชาสัมพันธ์</h2>
+        <input id="q" class="px-4 py-2 rounded-xl border w-full sm:w-auto" placeholder="ค้นหาหัวข้อ..." />
+        </div>
+
+        <div id="grid" class="grid md:grid-cols-3 gap-5 mt-6"></div>
+    </main>
+
+    <footer class="mt-auto text-white text-sm" style="background:linear-gradient(90deg,var(--blue),var(--red))">
+        <div class="max-w-6xl mx-auto px-4 py-6 text-center">
+        © <span id="y"></span> MSD Club
+        </div>
+    </footer>
+
+    <script src="/static/js/announcements.js"></script>
+</body>
+</html>

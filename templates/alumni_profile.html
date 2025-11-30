@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="th">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MSD Club — โปรไฟล์ศิษย์เก่า</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" href="/static/picture/MSD.jpg">
+    <style>
+        :root {
+        --red:#c70707;
+        --blue:#2d32c7;
+        --yellow:#FDC500;
+        --bg:#FAFAFA;
+        }
+        body {
+        background: var(--bg);
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh; /* ✅ ทำให้เต็มจอ */
+        }
+        main {
+        flex: 1; /* ✅ ดัน footer ลงล่าง */
+        }
+    </style>
+    </head>
+
+    <body class="text-slate-900 bg-[var(--bg)]">
+
+    <!-- ✅ Navbar -->
+    <header class="sticky top-0 z-50 border-b text-white"
+        style="background:linear-gradient(90deg,var(--red),var(--blue))">
+        <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+        <a href="/" class="flex items-center gap-3">
+            <span class="w-10 h-10 rounded-xl overflow-hidden">
+            <img src="/static/picture/MSD.jpg" alt="icon" class="w-full h-full object-cover">
+            </span>
+            <div class="hidden md:block">
+            <div class="text-lg font-extrabold tracking-wide">MSD Club</div>
+            <div class="text-xs opacity-90">Math · Stat · Data Science</div>
+            </div>
+        </a>
+        <nav class="flex gap-1">
+            <a class="px-3 py-2 rounded-lg hover:bg-white/10" href="/">หน้าหลัก</a>
+            <a class="px-3 py-2 rounded-lg bg-white/10" href="/alumni">นิสิตเก่า</a>
+            <a class="px-3 py-2 rounded-lg hover:bg-white/10" href="/announcements">ประชาสัมพันธ์</a>
+        </nav>
+        </div>
+    </header>
+
+    <!-- ✅ Main -->
+    <main class="flex-grow">
+        <div class="max-w-7xl mx-auto px-6 py-12">
+
+        <!-- ส่วนโปรไฟล์ -->
+        <div class="grid md:grid-cols-2 gap-10 items-center bg-white p-10 rounded-3xl shadow-lg">
+            <div class="flex justify-center">
+            <img id="alumniImage" src="/static/alumni_photos/default.jpg"
+                class="w-72 h-72 rounded-2xl object-cover shadow-md border border-gray-200">
+            </div>
+
+            <div>
+            <h1 id="alumniName" class="text-4xl font-extrabold text-blue-950 mb-2">ชื่อศิษย์เก่า</h1>
+            <p class="text-gray-700 text-lg"><b>รหัสนิสิต:</b> <span id="alumniId"></span></p>
+            <p class="text-gray-700 text-lg"><b>รุ่น:</b> <span id="alumniBatch"></span></p>
+            <div class="mt-3 space-y-2">
+                <p class="text-gray-700 text-lg"><b>ช่องทางติดต่อ:</b></p>
+                <div id="alumniContact" class="flex flex-wrap gap-3"></div>
+            </div>
+            <p id="alumniQuote" class="italic text-gray-500 mt-4"></p>
+            </div>
+        </div>
+
+        <!-- เพื่อนในรุ่นเดียวกัน -->
+        <div class="mt-14 border-t pt-8">
+            <h2 class="text-2xl font-extrabold text-blue-950 mb-6">เพื่อนในรุ่นเดียวกัน</h2>
+            <div id="friendsGrid" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
+        </div>
+
+        </div>
+    </main>
+
+    <!-- ✅ Footer (ติดล่างเสมอ) -->
+    <footer class="mt-auto text-white text-sm"
+            style="background:linear-gradient(90deg,var(--blue),var(--red))">
+        <div class="max-w-7xl mx-auto px-4 py-6 text-center">
+        © <span id="y"></span> MSD Club — Faculty of Science
+        </div>
+    </footer>
+
+    <script>
+        // ✅ ตรวจสอบว่าเป็นแอดมินไหม
+        const isAdmin = JSON.parse(localStorage.getItem('msd:isAdmin') || 'false');
+        if (isAdmin) {
+        const nav = document.querySelector('nav');
+        const adminLink = document.createElement('a');
+        adminLink.href = "/admin";
+        adminLink.textContent = "⚙️ แอดมิน";
+        adminLink.className = "px-3 py-2 rounded-lg bg-yellow-400 text-blue-950 font-bold hover:bg-yellow-300 transition";
+        nav.appendChild(adminLink);
+        }
+    </script>
+<script src="/static/js/profile.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MSD Club — Admin Panel</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- CropperJS CSS -->
+  <link  href="https://cdn.jsdelivr.net/npm/cropperjs@1.6.1/dist/cropper.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.6.1/dist/cropper.min.js"></script>
+  <link rel="icon" href="/static/picture/MSD.jpg">
+  <style>
+    :root {
+      --red: #D62828;
+      --blue: #003049;
+      --yellow: #FDC500;
+      --bg: #FAFAFA;
+    }
+    body {
+      background: var(--bg);
+    }
+    .card {
+      border-radius: 1rem;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      background: #fff;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 0.75rem;
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+    }
+    
+  :root{ --red:#c70707; --blue:#2d32c7; --yellow:#FDC500; --bg:#FAFAFA; }
+  body{ background:var(--bg); }
+  .draggable {
+    position: absolute;
+    inset: 0;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    cursor: grab;
+    transition: background-size 0.3s ease;
+  }
+  .dragging { cursor: grabbing; }
+  .card {
+    border-radius: 1rem;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    background: #fff;
+  }
+  @keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+.animate-fadeIn {
+  animation: fadeIn 0.25s ease-out;
+}
+
+
+  </style>
+</head>
+
+<body class="text-slate-900">
+  <!-- ✅ Navbar -->
+  <header class="sticky top-0 z-50 border-b text-white"
+    style="background:linear-gradient(90deg,var(--red),var(--blue))">
+    <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-3">
+        <span class="w-10 h-10 rounded-xl overflow-hidden">
+          <img src="/static/picture/MSD.jpg" alt="icon" class="w-full h-full object-cover">
+        </span>
+        <div class="hidden md:block">
+          <div class="text-lg font-extrabold tracking-wide">MSD Club</div>
+          <div class="text-xs opacity-90">Math · Stat · Data Science</div>
+        </div>
+      </a>
+      <nav class="flex gap-1">
+        <a class="px-3 py-2 rounded-lg hover:bg-white/10" href="/">หน้าหลัก</a>
+        <a class="px-3 py-2 rounded-lg hover:bg-white/10" href="/alumni">นิสิตเก่า</a>
+        <a class="px-3 py-2 rounded-lg hover:bg-white/10" href="/announcements">ประชาสัมพันธ์</a>
+      </nav>
+    </div>
+  </header>
+
+    <!-- ส่วนปุ่มเลือกแท็บ -->
+<!-- ✅ ปุ่มเปลี่ยนแท็บ -->
+<nav class="flex gap-3 mt-6 justify-center items-center">
+  <button id="tabPosts" class="btn bg-yellow-400 text-blue-950">โพสต์</button>
+  <button id="tabAlumni" class="btn bg-white border text-blue-950">ศิษย์เก่า</button>
+</nav>
+
+<!-- ✅ ส่วนศิษย์เก่า -->
+<section id="alumniSection" class="hidden mt-6">
+  <div class="flex items-center justify-between">
+    <h3 class="text-2xl font-bold text-blue-950">จัดการศิษย์เก่า</h3>
+    <button id="addBatchBtn" class="btn bg-green-500 text-white hidden">➕ เพิ่มรุ่น</button>
+  </div>
+
+  <!-- ✅ รายชื่อรุ่น -->
+  <div id="batchList" class="grid md:grid-cols-4 sm:grid-cols-2 gap-5 mt-5"></div>
+
+  <!-- ✅ หัวข้อรายชื่อ -->
+  <h3 class="text-2xl font-bold text-blue-950 mt-10 border-b-2 border-blue-200 pb-1">
+    รายชื่อในรุ่น <span id="batchTitle" class="text-red-600"></span>
+  </h3>
+
+  <!-- ✅ พื้นที่แสดงรายชื่อศิษย์เก่า -->
+  <div id="peopleGrid" class="mt-5 mb-20"></div>
+
+  <!-- ✅ Modal ฟอร์มเพิ่มรุ่น -->
+<div id="batchForm" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
+  <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md relative animate-fadeIn">
+    <div class="flex justify-between items-center mb-4">
+      <h4 class="text-xl font-bold text-blue-950">➕ เพิ่มรุ่นใหม่</h4>
+      <button id="cancelBatchBtn" class="text-red-500 text-2xl leading-none">&times;</button>
+    </div>
+    <input id="batchYear" type="text" placeholder="ปีรุ่น (เช่น 2024)"
+           class="w-full px-4 py-2 border rounded-xl mb-4 focus:ring-2 focus:ring-blue-400 outline-none" />
+    <div class="flex justify-end gap-3">
+      <button id="saveBatchBtn" class="btn bg-blue-600 text-white">บันทึก</button>
+    </div>
+  </div>
+</div>
+
+</section>
+
+
+  <main class="max-w-6xl mx-auto px-4 my-8">
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <h2 class="text-3xl font-extrabold text-blue-950">จัดการโพสต์ (Admin)</h2>
+      <div>
+        <button id="loginBtn" class="btn bg-yellow-400 text-blue-950">เข้าสู่ระบบแอดมิน</button>
+        <button id="logoutBtn" class="btn bg-white text-slate-900 hidden">ออกจากระบบ</button>
+      </div>
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-6 mt-5">
+      <!-- ฟอร์ม -->
+      <div class="card p-5">
+        <div class="text-xl font-bold text-blue-950">เพิ่ม/แก้ไขโพสต์</div>
+        <div class="mt-3">
+          <label class="text-sm">หัวข้อโพสต์</label>
+          <input id="title" class="w-full mt-1 px-3 py-2 rounded-xl border" placeholder="หัวข้อ..." />
+        </div>
+        <div class="mt-3">
+          <label class="text-sm">เนื้อหา</label>
+          <textarea id="content" class="w-full mt-1 px-3 py-2 rounded-xl border min-h-[140px]" placeholder="รายละเอียด..."></textarea>
+        </div>
+
+        <div class="mt-3">
+          <label class="text-sm">เลือกรูปภาพ </label>
+          <input id="fileInput" type="file" multiple accept="image/*"
+                class="mt-2 w-full border rounded-xl px-3 py-2 bg-white" />
+        </div>
+        <div id="previewBox" class="mt-3 grid grid-cols-3 gap-3"></div>
+
+
+        <div class="flex gap-2 mt-4 justify-end">
+          <button id="resetBtn" class="btn bg-white border">ล้าง</button>
+          <button id="saveBtn" class="btn" style="background:var(--red);color:#fff">บันทึก</button>
+        </div>
+      </div>
+
+      <!-- พรีวิว -->
+      <div class="card p-5">
+        <div class="text-xl font-bold text-blue-950">พรีวิวโพสต์</div>
+        <div id="preview" class="mt-3">
+          <div id="pvImageBox" class="aspect-video bg-gray-100 rounded-2xl"></div>
+          <div class="mt-3">
+            <span class="inline-block bg-yellow-400 text-blue-950 text-[11px] font-bold px-2 py-1 rounded" id="pvLayout">CARD</span>
+            <div class="font-bold text-blue-950 mt-2" id="pvTitle">(หัวข้อ)</div>
+            <div class="text-sm text-gray-600" id="pvContent">(เนื้อหาย่อ)</div>
+          </div>
+        </div>
+        <div class="flex gap-2 mt-3 justify-end">
+          <button id="undoCrop" class="btn bg-white border">↩️ ย้อนกลับ</button>
+          <button id="resetCrop" class="btn bg-yellow-400">🔄 รีเซ็ต</button>
+          <button id="openCropper" class="btn bg-yellow-400">✂️ ตัดภาพ</button>
+        </div>
+        <!-- Modal Crop Tool (CropperJS) -->
+      <div id="cropModal" class="fixed inset-0 bg-black/70 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-2xl shadow-xl p-4 max-w-3xl w-full">
+          <div class="flex justify-between items-center mb-2">
+            <div class="font-bold text-lg text-blue-900">✂️ ตัดภาพ</div>
+            <button id="closeCropper" class="text-red-500 text-2xl leading-none">&times;</button>
+          </div>
+          <div class="flex flex-col items-center gap-2">
+            <div class="w-full max-h-[70vh] overflow-hidden rounded-xl">
+              <img id="cropImageView" class="max-w-full" />
+            </div>
+            <div class="flex gap-2 mt-2 flex-wrap justify-center">
+              <button id="rotateLeft" class="btn bg-gray-200">↪ หมุนซ้าย</button>
+              <button id="rotateRight" class="btn bg-gray-200">↩ หมุนขวา</button>
+              <button id="resetCrop" class="btn bg-gray-200">🔄 รีเซ็ต</button>
+              <button id="applyCrop" class="btn bg-green-500 text-white">✅ ยืนยันการตัด</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      </div>
+    </div>
+    </div>
+  </div>
+</div>
+
+
+    <!-- ตารางรายการ -->
+    <div class="card p-0 mt-6 overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="p-3 text-left">ID</th>
+            <th class="p-3 text-left">หัวข้อ</th>
+            <th class="p-3 text-left">อัปเดตล่าสุด</th>
+            <th class="p-3 text-right">การจัดการ</th>
+          </tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+    <footer class="mt-auto text-white text-sm"
+            style="background:linear-gradient(90deg,var(--blue),var(--red))">
+        <div class="max-w-6xl mx-auto px-4 py-6 text-center">
+        © <span id="y"></span> MSD Club
+        </div>
+    </footer>
+
+  <script>
+      // 🧭 ระบบแท็บ: โพสต์ / ศิษย์เก่า
+      const tabPosts = document.getElementById('tabPosts');
+      const tabAlumni = document.getElementById('tabAlumni');
+      const alumniSection = document.getElementById('alumniSection');
+      const mainContent = document.querySelector('main'); // ส่วนโพสต์เดิมทั้งหมด
+
+      // เริ่มต้น: แสดงโพสต์ก่อน
+      alumniSection.classList.add('hidden');
+      mainContent.classList.remove('hidden');
+
+      // เมื่อคลิก "ศิษย์เก่า"
+      tabAlumni.addEventListener('click', () => {
+        mainContent.classList.add('hidden');
+        alumniSection.classList.remove('hidden');
+        
+        // เปลี่ยนสีปุ่ม
+        tabAlumni.classList.add('bg-yellow-400', 'text-blue-950');
+        tabPosts.classList.remove('bg-yellow-400', 'text-blue-950');
+        tabPosts.classList.add('bg-white', 'text-blue-950', 'border');
+      });
+
+      // เมื่อคลิก "โพสต์"
+      tabPosts.addEventListener('click', () => {
+        alumniSection.classList.add('hidden');
+        mainContent.classList.remove('hidden');
+
+        // เปลี่ยนสีปุ่มกลับ
+        tabPosts.classList.add('bg-yellow-400', 'text-blue-950');
+        tabAlumni.classList.remove('bg-yellow-400', 'text-blue-950');
+        tabAlumni.classList.add('bg-white', 'text-blue-950', 'border');
+      });
+  </script>
+
+
+<script src="/static/js/admin_alumni.js"></script>
+<script src="/static/js/admin_post.js"></script>
+        <script>
+  // ✅ ตรวจสอบว่าผู้ใช้เป็นแอดมิน (อ่านจาก localStorage)
+  function checkAdminStatus() {
+    const isAdmin = JSON.parse(localStorage.getItem('msd:isAdmin') || 'false');
+    const nav = document.querySelector('nav');
+    const existingLink = document.querySelector('#adminLink');
+
+    // ถ้าเป็นแอดมินและยังไม่มีปุ่ม → เพิ่มปุ่ม
+    if (isAdmin && !existingLink) {
+      const adminLink = document.createElement('a');
+      adminLink.id = "adminLink";
+      adminLink.href = "/admin";
+      adminLink.textContent = "⚙️ แอดมิน";
+      adminLink.className = "px-3 py-2 rounded-lg bg-yellow-400 text-blue-950 font-bold hover:bg-yellow-300 transition";
+      nav.appendChild(adminLink);
+    }
+
+    // ถ้าไม่ใช่แอดมินแต่มีปุ่มอยู่ → ลบออก
+    if (!isAdmin && existingLink) {
+      existingLink.remove();
+    }
+  }
+
+  // ✅ เรียกตอนโหลดหน้าเว็บ
+  checkAdminStatus();
+
+  // ✅ รองรับการอัปเดตสถานะแบบเรียลไทม์ (เมื่อ admin login/logout)
+  window.addEventListener("storage", checkAdminStatus);
+</script>
+
+
+</body>
+</html>

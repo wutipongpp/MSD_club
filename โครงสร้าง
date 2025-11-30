@@ -1,0 +1,24 @@
+msd-club/
+├── _pycache_/
+├── .venv/
+├── instance/
+|   ├──msdclub.db
+├── node_modules/
+├── static/
+|   ├── alumni_post/
+|   ├── js/
+|   ├──picture/
+|   ├──uploads/
+├── templates/
+|   ├──admin.html
+|   ├──alumni_profile.html
+|   ├──alumni.html
+|   ├──announcements.html
+|   ├──index.html
+|   ├──post.html
+├── app.py
+├──msd.db 
+├──package-look.json
+├──package.json
+├──requirements.txt
+├──vite.config.js
