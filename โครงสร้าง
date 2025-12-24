@@ -1,12 +1,14 @@
 msd-club/
-├── _pycache_/
-├── .venv/
-├── instance/
-|   ├──msdclub.db
-├── node_modules/
 ├── static/
 |   ├── alumni_post/
+|   ├──css/
+|   ├──gallery/
+|   ├──images/
+|   |   ├──index-activity/
+|   |   ├──popup-desktop/
+|   |   ├──popup-mobile/
 |   ├── js/
+|   ├──pdf/
 |   ├──picture/
 |   ├──uploads/
 ├── templates/
@@ -18,7 +20,14 @@ msd-club/
 |   ├──post.html
 ├── app.py
 ├──msd.db 
-├──package-look.json
-├──package.json
 ├──requirements.txt
-├──vite.config.js
+
+นำไฟล์ไปยัง docker ใช้คำสั่งล่างงนี้เลย
+docker build -t msd-club .
+
+รันไฟล์ทดสอบ 
+    บน py
+    python app.py
+
+    บน docker
+    docker run -p 5000:5000 msd-club

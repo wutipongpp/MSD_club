@@ -6,9 +6,17 @@
   <title>MSD Club — Admin Panel</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- CropperJS CSS -->
+  <link rel="stylesheet" href="/static/css/footer.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    
   <link  href="https://cdn.jsdelivr.net/npm/cropperjs@1.6.1/dist/cropper.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.6.1/dist/cropper.min.js"></script>
   <link rel="icon" href="/static/picture/MSD.jpg">
+  <link rel="stylesheet" href="/static/css/section.css">
+  <link rel="stylesheet" href="/static/css/nav.css">
+  <script src="/static/js/addevent.js"></script>
+  <script src="/static/js/loadevent.js"></script>
+  
   <style>
     :root {
       --red: #D62828;
@@ -62,55 +70,224 @@
 
 
   </style>
+  <style>
+
+   
+    .edit-color-choice,.color-choice {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    box-shadow: 0 0 2px rgba(0,0,0,0.2);
+    transition: transform .2s, border-color .2s;
+}
+
+    .edit-color-choice:hover,.color-choice:hover {
+        transform: scale(1.1);
+    }
+
+    .edit-color-choice.selected,.color-choice.selected {
+        border-color: #111;
+        transform: scale(1.15);
+    }
+
+
+  </style>
 </head>
 
 <body class="text-slate-900">
-  <!-- ✅ Navbar -->
-  <header class="sticky top-0 z-50 border-b text-white"
-    style="background:linear-gradient(90deg,var(--red),var(--blue))">
+      <!-- ===============================
+        DESKTOP NAV
+    ================================= -->
+    <header class="hidden md:block sticky top-0 z-50 border-b text-white"
+            style="background:linear-gradient(90deg,var(--red),var(--blue))">
     <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
-      <a href="/" class="flex items-center gap-3">
+
+        <!-- Logo -->
+        <a href="/" class="flex items-center gap-3">
         <span class="w-10 h-10 rounded-xl overflow-hidden">
-          <img src="/static/picture/MSD.jpg" alt="icon" class="w-full h-full object-cover">
+            <img src="/static/picture/MSD.jpg" class="w-full h-full object-cover">
         </span>
-        <div class="hidden md:block">
-          <div class="text-lg font-extrabold tracking-wide">MSD Club</div>
-          <div class="text-xs opacity-90">Math · Stat · Data Science</div>
+        <div>
+            <div class="text-lg font-extrabold tracking-wide">MSD Club</div>
+            <div class="text-xs opacity-90">Math · Stat · Data Science</div>
         </div>
-      </a>
-      <nav class="flex gap-1">
-        <a class="px-3 py-2 rounded-lg hover:bg-white/10" href="/">หน้าหลัก</a>
+        </a>
+
+        <!-- Menu -->
+        <nav class="flex gap-1 items-center relative">
+
+        <a class="px-3 py-2 rounded-lg hover:bg-white/10 " href="/">หน้าหลัก</a>
+
         <a class="px-3 py-2 rounded-lg hover:bg-white/10" href="/alumni">นิสิตเก่า</a>
+
+          <!-- Dropdown -->
+        <div class="relative group">
+            <button class="px-3 py-2 rounded-lg hover:bg-white/10  flex items-center gap-1">
+                เกี่ยวกับ MSD ▾
+            </button>
+
+            <div class="absolute left-0 mt-2 w-56 rounded-xl shadow-lg py-2
+                        opacity-0 invisible group-hover:visible group-hover:opacity-100 
+                        transition-all duration-300 transform group-hover:translate-y-0 -translate-y-2"
+                style="
+                    background: linear-gradient(100deg, rgba(140, 45, 199, 0.95), rgba(36, 17, 180, 0.95));
+                    backdrop-filter: width(80px);
+                ">
+
+                <a href="/gallery" 
+                class="block px-4 py-2 text-white/90 hover:bg-white/10 hover:text-white rounded-lg transition">
+                    📸 ภาพประกอบกิจกรรม
+                </a>
+
+                <a href="/activity_schedule" 
+                class="block px-4 py-2 text-white/90 hover:bg-white/10 hover:text-white rounded-lg transition">
+                    🗓️ ตารางกิจกรรม
+                </a>
+
+                <div class="border-t border-white/20 my-1"></div>
+
+                <a href="/club_organization_chart" 
+                class="block px-4 py-2 text-white/90 hover:bg-white/10 hover:text-white rounded-lg transition">
+                    🗓️  ผังองค์กรชมรม
+                </a>
+
+            </div>
+        </div>
+
         <a class="px-3 py-2 rounded-lg hover:bg-white/10" href="/announcements">ประชาสัมพันธ์</a>
-      </nav>
+        </nav>
     </div>
-  </header>
+    </header>
+
+
+
+
+        <!-- ===============================
+                    MOBILE HEADER
+            ================================= -->
+            <header class="md:hidden sticky top-0 z-50 border-b text-white"
+                    style="background:linear-gradient(90deg,var(--red),var(--blue))">
+                <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+
+                <a href="/" class="flex items-center gap-3">
+                    <span class="w-10 h-10 rounded-xl overflow-hidden shadow-md">
+                    <img src="/static/picture/MSD.jpg" class="w-full h-full object-cover">
+                    </span>
+                    <div>
+                    <div class="text-lg font-extrabold tracking-wide">MSD Club</div>
+                    <div class="text-xs opacity-90">Math · Stat · Data Science</div>
+                    </div>
+                </a>
+
+                <button id="menuBtn"
+                        class="text-3xl p-2 rounded-lg active:scale-90 
+                                hover:bg-white/20 transition">
+                    ☰
+                </button>
+                </div>
+            </header>
+
+
+
+
+      <!-- ===============================
+          NEW MOBILE OFFCANVAS MENU
+      ================================= -->
+      <div id="mobileMenu"
+          class="fixed top-0 right-0 w-72 h-full z-[10000]
+                  translate-x-full transition-transform duration-300
+                  flex flex-col bg-gradient-to-b 
+                  from-[var(--red)] to-[var(--blue)]
+                  text-white shadow-[0_0_30px_rgba(0,0,0,0.45)] md:hidden">
+
+          <button id="closeMenu"
+                  class="self-end text-4xl px-4 py-3 
+                        text-white hover:text-yellow-300 transition">
+              &times;
+          </button>
+
+          <!-- PROFILE HEADER -->
+          <div class="px-6 py-3 mb-3 flex items-center gap-3">
+              <span class="w-12 h-12 rounded-xl overflow-hidden shadow-lg border border-white/20">
+                  <img src="/static/picture/MSD.jpg" class="w-full h-full object-cover">
+              </span>
+              <div>
+                  <div class="text-xl font-extrabold drop-shadow">MSD Club Menu</div>
+                  <div class="text-white/80 text-sm -mt-1">Math • Stat • Data Science</div>
+              </div>
+          </div>
+
+          <nav class="flex flex-col gap-2 px-4">
+
+              <a href="/" class="px-3 py-2 rounded-lg hover:bg-white/10">
+                  🏠 หน้าหลัก
+              </a>
+
+              <a href="/alumni" class="px-3 py-2 rounded-lg hover:bg-white/10">
+                  🎓 นิสิตเก่า
+              </a>
+
+              <!-- Dropdown (improved) -->
+              <div class="w-full">
+                  <button class="dropdownBtn w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-white/10 ">
+                      <span>📁 เกี่ยวกับ MSD</span>
+                      <span class="arrow transition-transform">▾</span>
+                  </button>
+
+                  <div class="dropdownContent max-h-0 overflow-hidden transition-all duration-300 pl-6">
+                      <a href="/gallery" class="block py-2 hover:text-yellow-300 ">📸 ภาพประกอบกิจกรรม</a>
+                      <a href="/activity_schedule" class="block py-2 hover:text-yellow-300">🗓️ ตารางกิจกรรม</a>
+                      <a href="/club_organization_chart" class="block py-2 hover:text-yellow-300">🗓️ ผังองค์กรชมรม</a>
+                  </div>
+              </div>
+
+              <a href="/announcements" class="px-3 py-2 rounded-lg hover:bg-white/10">
+                  📣 ประชาสัมพันธ์
+              </a>
+
+          </nav>
+      </div>
+
 
     <!-- ส่วนปุ่มเลือกแท็บ -->
 <!-- ✅ ปุ่มเปลี่ยนแท็บ -->
 <nav class="flex gap-3 mt-6 justify-center items-center">
   <button id="tabPosts" class="btn bg-yellow-400 text-blue-950">โพสต์</button>
   <button id="tabAlumni" class="btn bg-white border text-blue-950">ศิษย์เก่า</button>
+  <button id="tabEvent" class="btn bg-white border text-blue-950">ตรางกิจกรรม</button>
 </nav>
 
 <!-- ✅ ส่วนศิษย์เก่า -->
 <section id="alumniSection" class="hidden mt-6">
   <div class="flex items-center justify-between">
-    <h3 class="text-2xl font-bold text-blue-950">จัดการศิษย์เก่า</h3>
-    <button id="addBatchBtn" class="btn bg-green-500 text-white hidden">➕ เพิ่มรุ่น</button>
+    <h3 class="text-2xl font-bold text-blue-950"  style="padding-left: 10%;">จัดการศิษย์เก่า</h3>
+      <div style="padding-right: 10%;">
+        <button id="addBatchBtn" class="btn bg-green-500 text-white hidden">➕ เพิ่มรุ่น</button>
+      </div>
   </div>
 
   <!-- ✅ รายชื่อรุ่น -->
-  <div id="batchList" class="grid md:grid-cols-4 sm:grid-cols-2 gap-5 mt-5"></div>
+    <div class="flex justify-end mt-4 mb-4" style="padding-right: 20%;">
+      <input id="q" placeholder="ค้นหารุ่น เช่น 65"
+        class="px-4 py-2 w-40 sm:w-56 md:w-64 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-300 transition" />
+    </div>
+
+
+    <div style="width: 90%; padding-left: 10%;">
+      <div class="section">
+        <div id="batchList" class="grid grid-cols-1 md:grid-cols-4 sm:grid-cols-2 gap-5 mt-5"></div>
+      </div>
 
   <!-- ✅ หัวข้อรายชื่อ -->
-  <h3 class="text-2xl font-bold text-blue-950 mt-10 border-b-2 border-blue-200 pb-1">
+  <h3 class="text-2xl font-bold text-blue-950 mt-10 border-b-2 border-blue-200 pb-1" style="padding-left: 10%;">
     รายชื่อในรุ่น <span id="batchTitle" class="text-red-600"></span>
   </h3>
 
   <!-- ✅ พื้นที่แสดงรายชื่อศิษย์เก่า -->
   <div id="peopleGrid" class="mt-5 mb-20"></div>
-
+  </div>
   <!-- ✅ Modal ฟอร์มเพิ่มรุ่น -->
 <div id="batchForm" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
   <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md relative animate-fadeIn">
@@ -129,7 +306,7 @@
 </section>
 
 
-  <main class="max-w-6xl mx-auto px-4 my-8">
+  <main id="postSection"  class="max-w-6xl mx-auto px-4 my-8">
     <div class="flex flex-wrap items-center justify-between gap-3">
       <h2 class="text-3xl font-extrabold text-blue-950">จัดการโพสต์ (Admin)</h2>
       <div>
@@ -224,48 +401,215 @@
       </table>
     </div>
   </main>
+  
+
+
+
+            <!-- ad evant -->
+      <section id="eventsSection" class="hidden" >
+      <div class="max-w-4xl mx-auto mt-8 px-4 min-h-[500px]">
+
+          <div class="flex justify-between items-center mb-6">
+              <h2 class="text-2xl font-bold text-blue-900">📅 จัดการกิจกรรม</h2>
+
+              <button onclick="openAddPopup()"
+                  class="px-4 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-700">
+                  ➕ เพิ่มกิจกรรม
+              </button>
+          </div>
+
+          <div class="overflow-x-auto rounded-xl shadow-lg">
+      <table class="min-w-full text-center bg-white">
+          <thead class="bg-gradient-to-r from-blue-800 to-blue-600 text-white">
+              <tr>
+                  <th class="py-2">ชื่อกิจกรรม</th>
+                  <th class="py-2">วันที่</th>
+                  <th class="py-2">โฟลเดอร์</th>
+                  <th class="py-2">ตัวเลือก</th>
+              </tr>
+          </thead>
+
+          <tbody id="eventTableBody" class="divide-y">
+          <tr>
+              <td colspan="4" class="py-6 text-gray-400 text-center">กำลังโหลด...</td>
+          </tr>
+      </tbody>
+
+      </table>
+      </div>
+      </div>
+      </section>
+
+      <!-- ========== MODAL BACKDROP ========== -->
+      <div id="eventModal"
+        class="fixed inset-0 bg-black/40 backdrop-blur-sm hidden flex justify-center items-center z-50">
+
+
+          <div class="bg-white rounded-xl shadow-lg w-full max-w-lg p-6 relative">
+
+              <!-- Close Button -->
+              <button onclick="closeEventModal()"
+                      class="absolute top-2 right-2 text-2xl text-slate-500 hover:text-red-500">
+                  &times;
+              </button>
+
+              <h2 class="text-xl font-bold mb-4">เพิ่มกิจกรรมใหม่</h2>
+
+              <!-- === EVENT ADD FORM === -->
+              <form action="/admin/add_event" method="POST" enctype="multipart/form-data">
+
+                  <label class="text-sm">ชื่อกิจกรรม *</label>
+                  <input type="text" name="title" required
+                        class="w-full mt-1 px-3 py-2 rounded-xl border"
+                        placeholder="ชื่อกิจกรรม">
+
+                                <!-- ประเภทวันจัดกิจกรรม -->
+              <label class="text-sm mt-3 block">วันที่จัดกิจกรรม *</label>
+              <div class="mt-1 grid grid-cols-2 gap-2">
+                  <div>
+                      <span class="text-xs text-gray-500">วันเริ่ม</span>
+                      <input type="date" name="date" required
+                            class="w-full mt-1 px-3 py-2 rounded-xl border">
+                  </div>
+                  <div>
+                      <span class="text-xs text-gray-500">วันสิ้นสุด</span>
+                      <input type="date" name="end_date"
+                            class="w-full mt-1 px-3 py-2 rounded-xl border">
+                  </div>
+              </div>
+
+                
+                <label class="text-sm mt-3 block">สีของกิจกรรม</label>
+                  <div id="colorPicker" class="flex flex-wrap gap-2 mt-2">
+                      <!-- ปุ่มเลือกสี -->
+                      <div class="color-choice" data-color="#f97316" style="background:#f97316"></div>
+                      <div class="color-choice" data-color="#0ea5e9" style="background:#0ea5e9"></div>
+                      <div class="color-choice" data-color="#2dd4bf" style="background:#2dd4bf"></div>
+                      <div class="color-choice" data-color="#ef4444" style="background:#ef4444"></div>
+                      <div class="color-choice" data-color="#ec4899" style="background:#ec4899"></div>
+                      <div class="color-choice" data-color="#84cc16" style="background:#84cc16"></div>
+                      <div class="color-choice" data-color="#1d4ed8" style="background:#1d4ed8"></div>
+                      <div class="color-choice" data-color="#818cf8" style="background:#818cf8"></div>
+                      <div class="color-choice" data-color="#6d28d9" style="background:#6d28d9"></div>
+                  </div>
+                  <span class="text-xs text-gray-500">สีที่เลือก</span>
+                  <!-- custom color -->
+                  <input type="color" name="color" id="eventColorInput"
+                        class="mt-2 w-16 h-10 p-0 border rounded-lg cursor-pointer"
+                        value="#f97316">
+
+
+
+
+                  <label class="text-sm mt-3 block">รายละเอียดกิจกรรม (ไม่บังคับ)</label>
+                  <textarea name="description"
+                            class="w-full mt-1 px-3 py-2 rounded-xl border"
+                            placeholder="รายละเอียดกิจกรรม..."></textarea>
+
+                  <label class="text-sm mt-3 block">เลือกรูปภาพกิจกรรม (หลายรูปได้)</label>
+                  <input type="file" name="gallery[]" multiple accept="image/*"
+                        class="w-full mt-1 px-3 py-2 rounded-xl border bg-white">
+
+                  <button class="mt-5 px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 w-full">
+                      บันทึกกิจกรรม
+                  </button>
+
+              </form>
+          </div>
+      </div>
+
+
+
+              <!-- Edit Event Modal -->
+        <div id="editEventModal" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+          <div class="bg-white rounded-lg p-6 w-full max-w-md">
+              <h2 class="text-xl font-bold mb-3">แก้ไขกิจกรรม</h2>
+              <form id="editEventForm">
+                  <input type="hidden" id="editEventId">
+
+                  <label class="font-semibold">ชื่อกิจกรรม</label>
+                  <input id="editTitle" type="text" class="w-full border rounded p-2 mb-2">
+
+                  <label class="font-semibold mt-3 block">วันที่จัดกิจกรรม *</label>
+                  <div class="grid grid-cols-2 gap-2 mb-3">
+                      <div>
+                          <span class="text-xs text-gray-500">วันเริ่ม</span>
+                          <input id="editStartDate" type="date"
+                              class="w-full mt-1 border rounded p-2">
+                      </div>
+                      <div>
+                          <span class="text-xs text-gray-500">วันสิ้นสุด</span>
+                          <input id="editEndDate" type="date"
+                              class="w-full mt-1 border rounded p-2">
+                      </div>
+                  </div>
+
+                  <div style="bottom: 15%;">
+                  <label class="font-semibold text-sm mt-3 block">สีของกิจกรรม</label>
+                  <div id="editColorPicker" class="flex flex-wrap gap-2 mt-2">
+                      <div class="edit-color-choice" data-color="#f97316" style="background:#f97316"></div>
+                      <div class="edit-color-choice" data-color="#0ea5e9" style="background:#0ea5e9"></div>
+                      <div class="edit-color-choice" data-color="#2dd4bf" style="background:#2dd4bf"></div>
+                      <div class="edit-color-choice" data-color="#ef4444" style="background:#ef4444"></div>
+                      <div class="edit-color-choice" data-color="#ec4899" style="background:#ec4899"></div>
+                      <div class="edit-color-choice" data-color="#84cc16" style="background:#84cc16"></div>
+                      <div class="edit-color-choice" data-color="#1d4ed8" style="background:#1d4ed8"></div>
+                      <div class="edit-color-choice" data-color="#818cf8" style="background:#818cf8"></div>
+                      <div class="edit-color-choice" data-color="#6d28d9" style="background:#6d28d9"></div>
+                  </div>
+                  <span class="text-xs text-gray-500">สีที่เลือก</span>
+                  <input type="color" name="color"  id="editColorInput"
+                        class="mt-2 w-16 h-10 p-0 border rounded-lg cursor-pointer" 
+                        >
+                  </div>
+
+                  <label class="font-semibold">รายละเอียด</label>
+                  <textarea id="editDesc" class="w-full border rounded p-2 mb-3"></textarea>
+
+                  <div class="flex justify-end gap-2">
+                      <button type="button" onclick="closeEditModal()"
+                          class="px-3 py-1 rounded bg-gray-400 hover:bg-gray-500 text-white">
+                        ยกเลิก
+                      </button>
+                      <button type="submit"
+                          class="px-3 py-1 rounded bg-blue-600 hover:bg-blue-700 text-white">
+                        บันทึก
+                      </button>
+                  </div>
+              </form>
+          </div>
+</div>
+
+
+
 
   <!-- FOOTER -->
     <footer class="mt-auto text-white text-sm"
-            style="background:linear-gradient(90deg,var(--blue),var(--red))">
-        <div class="max-w-6xl mx-auto px-4 py-6 text-center">
-        © <span id="y"></span> MSD Club
+        style="background:linear-gradient(90deg,var(--blue),var(--red))">
+    <div class="max-w-6xl mx-auto px-4 py-6 text-center space-y-3">
+
+        <p class="opacity-90">ติดตามข่าวสารชมรม MSD ได้ที่</p>
+
+        <!-- Social Icons -->
+        <div class="flex justify-center gap-6 text-2xl">
+            <a href="https://www.facebook.com/profile.php?id=100095105160653" class="social-icon hover:text-yellow-300 transition" aria-label="Facebook">
+                <i class="fa-brands fa-facebook"></i>
+            </a>
+            <a href="https://www.instagram.com/msd.nu/" class="social-icon hover:text-yellow-300 transition" aria-label="Instagram">
+                <i class="fa-brands fa-instagram"></i>
+            </a>
+            <a href="https://www.tiktok.com/@msd.nu.official?is_from_webapp=1&sender_device=pc" class="social-icon hover:text-yellow-300 transition" aria-label="TikTok">
+                <i class="fa-brands fa-tiktok"></i>
+            </a>
         </div>
-    </footer>
 
-  <script>
-      // 🧭 ระบบแท็บ: โพสต์ / ศิษย์เก่า
-      const tabPosts = document.getElementById('tabPosts');
-      const tabAlumni = document.getElementById('tabAlumni');
-      const alumniSection = document.getElementById('alumniSection');
-      const mainContent = document.querySelector('main'); // ส่วนโพสต์เดิมทั้งหมด
+        <div>
+            © <span id="y"></span> MSD Club — Math • Stat • Data Science
+        </div>
+    </div>
+</footer>
 
-      // เริ่มต้น: แสดงโพสต์ก่อน
-      alumniSection.classList.add('hidden');
-      mainContent.classList.remove('hidden');
-
-      // เมื่อคลิก "ศิษย์เก่า"
-      tabAlumni.addEventListener('click', () => {
-        mainContent.classList.add('hidden');
-        alumniSection.classList.remove('hidden');
-        
-        // เปลี่ยนสีปุ่ม
-        tabAlumni.classList.add('bg-yellow-400', 'text-blue-950');
-        tabPosts.classList.remove('bg-yellow-400', 'text-blue-950');
-        tabPosts.classList.add('bg-white', 'text-blue-950', 'border');
-      });
-
-      // เมื่อคลิก "โพสต์"
-      tabPosts.addEventListener('click', () => {
-        alumniSection.classList.add('hidden');
-        mainContent.classList.remove('hidden');
-
-        // เปลี่ยนสีปุ่มกลับ
-        tabPosts.classList.add('bg-yellow-400', 'text-blue-950');
-        tabAlumni.classList.remove('bg-yellow-400', 'text-blue-950');
-        tabAlumni.classList.add('bg-white', 'text-blue-950', 'border');
-      });
-  </script>
+<script src="/static/js/tab.js"></script>
 
 
 <script src="/static/js/admin_alumni.js"></script>
@@ -299,7 +643,9 @@
   // ✅ รองรับการอัปเดตสถานะแบบเรียลไทม์ (เมื่อ admin login/logout)
   window.addEventListener("storage", checkAdminStatus);
 </script>
-
-
+<script src="/static/js/q.js"></script>
+<script src="/static/js/nav.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 </body>
 </html>

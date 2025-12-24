@@ -1,0 +1,99 @@
+.scroll-btn {
+    font-weight: bold;
+    position: fixed;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    gap: 1px;
+    padding: 10px 10px;
+    border-radius: 999px;
+    cursor: pointer;
+    color: rgba(75, 94, 205, 0.9);
+    -webkit-text-stroke: 0.005vb white; /* ขอบ */
+    z-index: 999;
+
+    /* ไล่สี + โปร่งใส */
+    background: 
+        linear-gradient(
+            to right,
+            rgb(255, 246, 68, 0.65),
+            rgb(255, 246, 68, 0.45),
+            
+            rgba(97, 139, 255, 0.45),
+            rgba(97, 139, 255, 0.65)
+        ),
+        rgba(255, 255, 255, 0.65);  /* สีขาวทับบางๆ */
+
+    background-blend-mode: lighten;
+
+    
+
+
+    /* เอฟเฟกต์กระจก */
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(12px);
+
+    border: 1px solid rgba(255, 255, 255, 0.18);
+
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+
+    transition: 
+        background 0.25s ease,
+        transform 0.25s ease,
+        opacity 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+/* ปุ่มขึ้น/ลง */
+.top-btn { bottom: 85px; }
+.bottom-btn { bottom: 25px; }
+
+/* ไอคอน */
+.icon {
+    font-size: 18px;
+    pointer-events: none;
+}
+
+/* ————————————————
+   ✨ Hover: สีเข้มขึ้น + เด้งเบา ๆ
+   ———————————————— */
+.scroll-btn:hover,
+.scroll-btn:active {
+    background: 
+        linear-gradient(
+            to right,
+            rgb(255, 246, 68, 0.95),
+            rgb(255, 246, 68, 0.65),
+            rgb(255, 246, 68, 0.35),
+            
+            rgba(97, 139, 255, 0.35),   /* เข้มขึ้น */
+            rgba(97, 139, 255, 0.65),
+            rgba(97, 139, 255, 0.95)
+        ),
+        rgba(255, 255, 255, 0.45);  /* สีขาวทับบางๆ */
+
+    background-blend-mode: lighten;
+
+    box-shadow: 0 8px 25px rgba(0,0,0,0.35);
+    transform: scale(1.07) translateY(-2px);
+}
+
+/* ข้อความ effect ตอน hover */
+.label {
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 0;
+    opacity: 0;
+    transition: max-width 0.9s ease, opacity 0.2s ease;
+}
+
+.scroll-btn:hover .label,
+.scroll-btn:active .label {
+    max-width: 120px;
+    opacity: 1;
+}
+
+/* เริ่มต้นปุ่มบนสุดปิดอยู่ */
+#scrollTopBtn {
+    display: none;
+}

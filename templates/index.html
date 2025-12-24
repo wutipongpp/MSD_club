@@ -4,8 +4,19 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>MSD Club — หน้าหลัก</title>
+  
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="icon" href="/static/picture/MSD.jpg">
+  <link rel="stylesheet" href="/static/css/scroll.css">
+  <link rel="stylesheet" href="/static/css/effect.css">
+  <link rel="stylesheet" href="/static/css/popup.css">
+  <link rel="stylesheet" href="/static/css/nav.css">
+  <link rel="stylesheet" href="/static/css/cut-bg.css">
+  <script src="/static/js/activity.js"></script>
+  <link rel="stylesheet" href="/static/css/activity.css">
+  <link rel="stylesheet" href="/static/css/footer.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    
   <style>
     :root {
       --red: #c70707;
@@ -14,32 +25,167 @@
       --bg: #FAFAFA;
     }
     body { background: var(--bg); }
+      
+
   </style>
 </head>
 
 
 <body class="text-slate-900 bg-[var(--bg)]">
-    <!-- ✅ Navbar เดิม -->
-    <header class="sticky top-0 z-50 border-b text-white"
-            style="background:linear-gradient(90deg,var(--red),var(--blue))">
-        <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+
+  <!-- ===============================
+      DESKTOP NAV
+================================= -->
+<header class="hidden md:block sticky top-0 z-50 border-b text-white"
+        style="background:linear-gradient(90deg,var(--red),var(--blue))">
+  <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+
+    <!-- Logo -->
+    <a href="/" class="flex items-center gap-3">
+      <span class="w-10 h-10 rounded-xl overflow-hidden">
+        <img src="/static/picture/MSD.jpg" class="w-full h-full object-cover">
+      </span>
+      <div>
+        <div class="text-lg font-extrabold tracking-wide">MSD Club</div>
+        <div class="text-xs opacity-90">Math · Stat · Data Science</div>
+      </div>
+    </a>
+
+    <!-- Menu -->
+    <nav class="flex gap-1 items-center relative">
+
+      <a class="px-3 py-2 rounded-lg hover:bg-white/10 bg-white/10" href="/">หน้าหลัก</a>
+
+      <a class="px-3 py-2 rounded-lg hover:bg-white/10" href="/alumni">นิสิตเก่า</a>
+
+        <!-- Dropdown -->
+        <div class="relative group">
+            <button class="px-3 py-2 rounded-lg hover:bg-white/10  flex items-center gap-1">
+                เกี่ยวกับ MSD ▾
+            </button>
+
+            <div class="absolute left-0 mt-2 w-56 rounded-xl shadow-lg py-2
+                        opacity-0 invisible group-hover:visible group-hover:opacity-100 
+                        transition-all duration-300 transform group-hover:translate-y-0 -translate-y-2"
+                style="
+                    background: linear-gradient(100deg, rgba(140, 45, 199, 0.95), rgba(36, 17, 180, 0.95));
+                    backdrop-filter: width(80px);
+                ">
+
+                <a href="/gallery" 
+                class="block px-4 py-2 text-white/90 hover:bg-white/10 hover:text-white rounded-lg transition">
+                    📸 ภาพประกอบกิจกรรม
+                </a>
+
+                <a href="/activity_schedule" 
+                class="block px-4 py-2 text-white/90 hover:bg-white/10 hover:text-white rounded-lg transition">
+                    🗓️ ตารางกิจกรรม
+                </a>
+
+                <div class="border-t border-white/20 my-1"></div>
+
+                <a href="/club_organization_chart" 
+                class="block px-4 py-2 text-white/90 hover:bg-white/10 hover:text-white rounded-lg transition">
+                    🗓️  ผังองค์กรชมรม
+                </a>
+
+            </div>
+        </div>
+
+      <a class="px-3 py-2 rounded-lg hover:bg-white/10" href="/announcements">ประชาสัมพันธ์</a>
+    </nav>
+  </div>
+</header>
+
+
+
+        <!-- ===============================
+        MOBILE HEADER
+================================= -->
+<header class="md:hidden sticky top-0 z-50 border-b text-white"
+        style="background:linear-gradient(90deg,var(--red),var(--blue))">
+    <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+
         <a href="/" class="flex items-center gap-3">
-            <span class="w-10 h-10 rounded-xl overflow-hidden">
-            <img src="/static/picture/MSD.jpg" alt="icon" class="w-full h-full object-cover">
+            <span class="w-10 h-10 rounded-xl overflow-hidden shadow-md">
+                <img src="/static/picture/MSD.jpg" class="w-full h-full object-cover">
             </span>
-            <div class="hidden md:block">
-            <div class="text-lg font-extrabold tracking-wide">MSD Club</div>
-            <div class="text-xs opacity-90">Math · Stat · Data Science</div>
+            <div>
+                <div class="text-lg font-extrabold tracking-wide">MSD Club</div>
+                <div class="text-xs opacity-90">Math · Stat · Data Science</div>
             </div>
         </a>
-        <nav class="flex gap-1">
-            <a class="px-3 py-2 rounded-lg bg-white/10" href="/">หน้าหลัก</a>
-            <a class="px-3 py-2 rounded-lg hover:bg-white/10" href="/alumni">นิสิตเก่า</a>
-            <a class="px-3 py-2 rounded-lg hover:bg-white/10" href="/announcements">ประชาสัมพันธ์</a>
-        </nav>
-        </div>
-    </header>
 
+        <button id="menuBtn"
+                class="text-3xl p-2 rounded-lg active:scale-90 
+                       hover:bg-white/20 transition">
+            ☰
+        </button>
+    </div>
+</header>
+
+<!-- ===============================
+     NEW MOBILE OFFCANVAS MENU
+================================= -->
+<div id="mobileMenu"
+     class="fixed top-0 right-0 w-72 h-full z-[10000]
+            translate-x-full transition-transform duration-300
+            flex flex-col bg-gradient-to-b 
+            from-[var(--red)] to-[var(--blue)]
+            text-white shadow-[0_0_30px_rgba(0,0,0,0.45)] md:hidden">
+
+    <button id="closeMenu"
+            class="self-end text-4xl px-4 py-3 
+                   text-white hover:text-yellow-300 transition">
+        &times;
+    </button>
+
+    <!-- PROFILE HEADER -->
+    <div class="px-6 py-3 mb-3 flex items-center gap-3">
+        <span class="w-12 h-12 rounded-xl overflow-hidden shadow-lg border border-white/20">
+            <img src="/static/picture/MSD.jpg" class="w-full h-full object-cover">
+        </span>
+        <div>
+            <div class="text-xl font-extrabold drop-shadow">MSD Club Menu</div>
+            <div class="text-white/80 text-sm -mt-1">Math • Stat • Data Science</div>
+        </div>
+    </div>
+
+    <nav class="flex flex-col gap-2 px-4">
+
+        <a href="/" class="px-3 py-2 rounded-lg hover:bg-white/10 bg-white/10">
+            🏠 หน้าหลัก
+        </a>
+
+        <a href="/alumni" class="px-3 py-2 rounded-lg hover:bg-white/10">
+            🎓 นิสิตเก่า
+        </a>
+
+        <!-- Dropdown (improved) -->
+        <div class="w-full">
+            <button class="dropdownBtn w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-white/10 ">
+                <span>📁 เกี่ยวกับ MSD</span>
+                <span >▾</span>
+            </button>
+
+            <div class="dropdownContent max-h-0 overflow-hidden transition-all duration-300 pl-6">
+                <a href="/gallery" class="block py-2 hover:text-yellow-300 ">📸 ภาพประกอบกิจกรรม</a>
+                <a href="/activity_schedule" class="block py-2 hover:text-yellow-300">🗓️ ตารางกิจกรรม</a>
+                <a href="/club_organization_chart" class="block py-2 hover:text-yellow-300">🗓️ ผังองค์กรชมรม</a>
+            </div>
+        </div>
+
+        <a href="/announcements" class="px-3 py-2 rounded-lg hover:bg-white/10">
+            📣 ประชาสัมพันธ์
+        </a>
+
+    </nav>
+</div>
+
+
+
+
+    
     <!-- ✅ Hero Section: สไลด์ -->
     <section class="relative w-full h-[500px] overflow-hidden">
         <div id="carousel" class="absolute inset-0 w-full h-full">
@@ -50,6 +196,7 @@
         <div class="absolute inset-0 bg-cover bg-center transition-opacity duration-1000 opacity-0"
             style="background-image:url('/static/picture/3.jpg')"></div>
         </div>
+        
 
         <div class="absolute inset-0 bg-black/40"></div>
         <div class="absolute inset-0 flex flex-col justify-center items-center text-center text-white px-6">
@@ -59,18 +206,33 @@
         </p>
         <div class="flex gap-3">
             <a href="/announcements" class="bg-yellow-400 text-blue-950 font-bold px-5 py-2 rounded-xl shadow hover:bg-yellow-300 transition">📣 ข่าวประชาสัมพันธ์</a>
-            <a href="/alumni" class="bg-white text-slate-900 font-bold px-5 py-2 rounded-xl shadow hover:bg-gray-100 transition">🎓 ดูศิษย์เก่า</a>
+            <a href="/alumni" class="bg-white text-slate-900 font-bold px-5 py-2 rounded-xl shadow hover:bg-gray-100 transition">🎓 ศิษย์เก่า</a>
         </div>
         </div>
     </section>
 
+
+     <!-- ปุ่มขึ้น -->
+  <div id="scrollTopBtn" class="scroll-btn top-btn">
+      <span class="icon">🔼</span>
+      <span class="label">ขึ้นบนสุด</span>
+  </div>
+
+  <!-- ปุ่มลง -->
+  <div id="scrollBottomBtn" class="scroll-btn bottom-btn">
+      <span class="icon">🔽</span>
+      <span class="label">ลงล่างสุด</span>
+  </div>
+
+
+    <div class="reveal">
     <!-- ✅ About -->
     <section class="max-w-6xl mx-auto px-4 py-16 grid md:grid-cols-2 gap-10">
         <div>
         <h2 class="text-3xl font-extrabold text-blue-950 mb-4">เกี่ยวกับชมรม</h2>
         <p class="text-slate-700 leading-relaxed">
             MSD Club คือพื้นที่ของคนที่เชื่อในพลังของ <span class="text-red-600 font-semibold">คณิตศาสตร์</span>,
-            <span class="text-blue-700 font-semibold">สถิติ</span> และ <span class="text-yellow-500 font-semibold">Data Science</span>
+            <span class="text-yellow-500 font-semibold">สถิติ</span> และ <span class="text-blue-700 font-semibold">Data Science</span>
             เราเรียนรู้ผ่านการลงมือทำ — ทั้ง Workshop, โครงงาน, และกิจกรรมร่วมกับศิษย์เก่า
         </p>
         <ul class="mt-5 text-slate-700 list-disc pl-6 space-y-1">
@@ -90,35 +252,91 @@
         </div>
         </div>
     </section>
+    </div>
 
+      
+    
+    
+      <div class="reveal ">
     <!-- ✅ Highlights -->
-    <section class="bg-gradient-to-r from-yellow-100 via-white to-blue-100 py-16">
-        <div class="max-w-6xl mx-auto px-4">
-        <h2 class="text-3xl font-extrabold text-center text-blue-950 mb-10">กิจกรรมเด่น</h2>
-        <div class="grid md:grid-cols-4 sm:grid-cols-2 gap-6">
-            <div class="bg-white p-4 rounded-2xl shadow hover:shadow-xl transition">
-            <img src="/static/picture/activity1.jpg" class="rounded-xl mb-3 w-full h-40 object-cover">
-            <h3 class="font-bold text-red-700">Math Challenge</h3>
-            <p class="text-sm text-gray-500">เวทีแข่งขันความคิดสร้างสรรค์ด้านคณิตศาสตร์</p>
-            </div>
-            <div class="bg-white p-4 rounded-2xl shadow hover:shadow-xl transition">
-            <img src="/static/picture/activity2.jpg" class="rounded-xl mb-3 w-full h-40 object-cover">
-            <h3 class="font-bold text-blue-700">Stats Hack</h3>
-            <p class="text-sm text-gray-500">Workshop เจาะลึกสถิติและ Data Analytics</p>
-            </div>
-            <div class="bg-white p-4 rounded-2xl shadow hover:shadow-xl transition">
-            <img src="/static/picture/activity3.jpg" class="rounded-xl mb-3 w-full h-40 object-cover">
-            <h3 class="font-bold text-yellow-600">DS Bootcamp</h3>
-            <p class="text-sm text-gray-500">เข้มข้นกับโปรเจกต์จริงในโลก Data Science</p>
-            </div>
-            <div class="bg-white p-4 rounded-2xl shadow hover:shadow-xl transition">
-            <img src="/static/picture/activity4.jpg" class="rounded-xl mb-3 w-full h-40 object-cover">
-            <h3 class="font-bold text-red-700">Kaggle Night</h3>
-            <p class="text-sm text-gray-500">คืนแห่งการวิเคราะห์ข้อมูลและแข่งขัน AI</p>
-            </div>
-        </div>
-        </div>
-    </section>
+   <section class="bg-gradient-to-r from-yellow-100 via-white to-blue-100 py-16">
+  <div class="max-w-6xl mx-auto px-4">
+    <h2 class="text-3xl font-extrabold text-center text-blue-950 mb-10">กิจกรรมเด่น</h2>
+    <div class="grid md:grid-cols-4 sm:grid-cols-2 gap-6">
+
+      <!-- 1 -->
+      <div class="activity-card bg-white p-4 rounded-2xl shadow hover:shadow-xl transition">
+        <img src="/static/images/index-activity/Traveling-Math-Camp.jpg"
+          class="rounded-xl mb-3 w-full h-40 object-cover">
+        <h3 class="text-lg font-bold text-red-700 mb-2">
+          ค่ายคณิตศาสตร์สัญจร
+        </h3>
+
+        <p class="content text-sm text-gray-600">
+          ส่งเสริมการเรียนรู้คณิตศาสตร์แก่เยาวชนในพื้นที่ พร้อมปลูกฝังจิตอาสาและความมีน้ำใจในการทำงานร่วมกับผู้อื่น
+          <span class="more-content">
+            ผ่านกิจกรรมฐานคณิตศาสตร์และกิจกรรมพัฒนาสถานศึกษา และเปิดโอกาสให้นิสิตได้เรียนรู้การทำงานภาคสนามจริง เสริมทักษะการสื่อสาร การแก้ปัญหา และความเป็นผู้นำ
+          </span>
+        </p>
+      </div>
+
+      <!-- 2 -->
+      <div class="activity-card bg-white p-4 rounded-2xl shadow hover:shadow-xl transition">
+        <img src="/static/images/index-activity/CATAN.jpg"
+          class="rounded-xl mb-3 w-full h-40 object-cover">
+        <h3 class="text-lg font-bold text-blue-700 mb-2">
+          แข่งขัน CATAN
+        </h3>
+
+        <p class="content text-sm text-gray-600">
+          กระตุ้นการคิดวิเคราะห์เชิงกลยุทธ์ การวางแผนล่วงหน้า และการตัดสินใจเชิงคณิตศาสตร์ภายใต้ทรัพยากรที่จำกัด
+          <span class="more-content">
+            อีกทั้งยังส่งเสริมทักษะการเจรจา การประเมินความเสี่ยง การบริหารทรัพยากร พร้อมทั้งสร้างความสัมพันธ์และมิตรภาพระหว่างนิสิตหลากหลายชั้นปี
+          </span>
+        </p>
+      </div>
+
+      <!-- 3 -->
+      <div class="activity-card bg-white p-4 rounded-2xl shadow hover:shadow-xl transition">
+        <img src="/static/images/index-activity/sci-week.jpg"
+          class="rounded-xl mb-3 w-full h-40 object-cover">
+        <h3 class="text-lg font-bold text-yellow-600 mb-2">
+          งานสัปดาห์วิทยาศาสตร์แห่งชาติ
+        </h3>
+
+        <p class="content text-sm text-gray-600">
+          เผยแพร่ความรู้ทางวิทยาศาสตร์ เทคโนโลยี และคณิตศาสตร์แก่เยาวชนและชุมชน
+          <span class="more-content">
+            ผ่านกิจกรรมฐานการเรียนรู้ นิทรรศการ และการนำเสนอผลงานโครงงานของนิสิต เพื่อสร้างแรงบันดาลใจสู่การเป็นผู้คิดค้นนวัตกรรมและนักวิจัยรุ่นใหม่ ในการขับเคลื่อนประเทศสู่อนาคต
+          </span>
+        </p>
+      </div>
+
+      <!-- 4 -->
+      <div class="activity-card bg-white p-4 rounded-2xl shadow hover:shadow-xl transition">
+        <img src="/static/images/index-activity/Mathematics-Project-Camp.jpg"
+          class="rounded-xl mb-3 w-full h-40 object-cover">
+        <h3 class="text-lg font-bold text-red-700 mb-2">
+          ค่ายโครงงานคณิตศาสตร์
+        </h3>
+
+        <p class="content text-sm text-gray-600">
+          พัฒนาทักษะการคิดเชิงวิเคราะห์และการแก้โจทย์ปัญหาทางคณิตศาสตร์อย่างเป็นระบบ
+          <span class="more-content">
+             ตั้งแต่การตั้งคำถาม การออกแบบวิธีศึกษา  ไปจนถึงการนำเสนอผลงานอย่างมืออาชีพ เปิดโอกาสให้เยาวชนค้นหาศักยภาพตนเอง และเตรียมความพร้อมสู่การแข่งขันหรือการศึกษาต่อในระดับที่สูงขึ้น
+          </span>
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+    
+    </div>
+
+    <div class="reveal under-at">
 
     <!-- ✅ ข่าวล่าสุด -->
     <section class="max-w-6xl mx-auto px-4 py-16">
@@ -134,13 +352,67 @@
         </div>
     </section>
 
-    <!-- FOOTER -->
-        <footer class="mt-auto text-white text-sm"
-                style="background:linear-gradient(90deg,var(--blue),var(--red))">
-            <div class="max-w-6xl mx-auto px-4 py-6 text-center">
-            © <span id="y"></span> MSD Club
-            </div>
-        </footer>
+    </div>
+    <footer class="mt-auto text-white text-sm"
+        style="background:linear-gradient(90deg,var(--blue),var(--red))">
+    <div class="max-w-6xl mx-auto px-4 py-6 text-center space-y-3">
+
+        <p class="opacity-90">ติดตามข่าวสารชมรม MSD ได้ที่</p>
+
+        <!-- Social Icons -->
+        <div class="flex justify-center gap-6 text-2xl">
+            <a href="https://www.facebook.com/profile.php?id=100095105160653" class="social-icon hover:text-yellow-300 transition" aria-label="Facebook">
+                <i class="fa-brands fa-facebook"></i>
+            </a>
+            <a href="https://www.instagram.com/msd.nu/" class="social-icon hover:text-yellow-300 transition" aria-label="Instagram">
+                <i class="fa-brands fa-instagram"></i>
+            </a>
+            <a href="https://www.tiktok.com/@msd.nu.official?is_from_webapp=1&sender_device=pc" class="social-icon hover:text-yellow-300 transition" aria-label="TikTok">
+                <i class="fa-brands fa-tiktok"></i>
+            </a>
+        </div>
+
+        <div>
+            © <span id="y"></span> MSD Club — Math • Stat • Data Science
+        </div>
+    </div>
+</footer>
+
+        <div id="promoPopup" class="popup-overlay">
+  <div class="popup-content">
+    <span class="close-btn">&times;</span>
+
+    <div class="slider-container">
+      <div class="slider" id="popupSlider">
+
+        <a href="/post/1">
+          <picture>
+            <source media="(max-width: 768px)" srcset="/static/images/popup-mobile/1.jpg">
+            <img src="/static/images/popup-desktop/1.jpg" class="popup-img" />
+          </picture>
+        </a>
+
+        <a href="/post/2">
+          <picture>
+            <source media="(max-width: 768px)" srcset="/static/images/popup-mobile/2.jpg">
+            <img src="/static/images/popup-desktop/2.jpg" class="popup-img" />
+          </picture>
+        </a>
+
+        <a href="/post/3">
+          <picture>
+            <source media="(max-width: 768px)" srcset="/static/images/popup-mobile/3.jpg">
+            <img src="/static/images/popup-desktop/3.jpg" class="popup-img" />
+          </picture>
+        </a>
+
+      </div>
+
+      <button class="arrow left" id="popupPrev">&#10094;</button>
+      <button class="arrow right" id="popupNext">&#10095;</button>
+    </div>
+  </div>
+</div>
 
     
     <script>
@@ -210,6 +482,29 @@
   document.addEventListener("DOMContentLoaded", loadLatestNews);
 </script>
 
+<script>// ปุ่ม
+  const topBtn = document.getElementById("scrollTopBtn");
+  const bottomBtn = document.getElementById("scrollBottomBtn");
+
+  topBtn.onclick = () => window.scrollTo({ top: 0, behavior: "smooth" });
+
+  bottomBtn.onclick = () =>
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+
+  window.addEventListener("scroll", () => {
+      topBtn.style.display = window.scrollY > 250 ? "flex" : "none";
+    });
+
+  window.addEventListener("scroll", () => {
+    const isAtBottom =
+        window.innerHeight + window.scrollY >= document.body.scrollHeight - 10;
+
+    bottomBtn.style.display = isAtBottom ? "none" : "flex";
+});
+
+
+
+</script>
 
     <script>
     // ✅ ตรวจสอบว่าผู้ใช้เป็นแอดมินหรือไม่
@@ -229,6 +524,8 @@
         nav.appendChild(adminLink);
     }
     </script>
-
+  <script src="/static/js/popup.js"></script>
+  <script src="/static/js/effect.js"></script>
+  <script src="/static/js/nav.js"></script>
 </body>
 </html>

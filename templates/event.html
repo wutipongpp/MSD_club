@@ -1,31 +1,18 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8">
+    <title>กิจกรรมชมรม</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>MSD Club — ประชาสัมพันธ์</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="icon" href="/static/picture/MSD.jpg">
     <link rel="stylesheet" href="/static/css/nav.css">
-    <link rel="stylesheet" href="/static/css/footer.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="icon" href="/static/picture/MSD.jpg">
+    <script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="/static/css/events.css">
+<link rel="stylesheet" href="/static/css/footer.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     
-    <style>
-        :root {
-        --red: #c70707;
-        --blue: #2d32c7;
-        --yellow: #FDC500;
-        --bg: #FAFAFA;
-        }
-        body { background: var(--bg); }
-        .card { border-radius: 1rem; border: 1px solid #e5e7eb; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-    </style>
-    </head>
-
-    <body class="flex flex-col min-h-screen text-slate-900 bg-[var(--bg)]">
-        <!-- ===============================
-        DESKTOP NAV
-    ================================= -->
+</head>
+<body class="bg-gradient-to-b from-slate-50 to-white text-slate-800">
     <header class="hidden md:block sticky top-0 z-50 border-b text-white"
             style="background:linear-gradient(90deg,var(--red),var(--blue))">
     <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
@@ -50,7 +37,7 @@
 
           <!-- Dropdown -->
         <div class="relative group">
-            <button class="px-3 py-2 rounded-lg hover:bg-white/10  flex items-center gap-1">
+            <button class="px-3 py-2 rounded-lg hover:bg-white/10 bg-white/10 flex items-center gap-1">
                 เกี่ยวกับ MSD ▾
             </button>
 
@@ -68,7 +55,7 @@
                 </a>
 
                 <a href="/activity_schedule" 
-                class="block px-4 py-2 text-white/90 hover:bg-white/10 hover:text-white rounded-lg transition">
+                class="block px-4 py-2 text-white/90 hover:bg-white/10 bg-white/10 hover:text-white rounded-lg transition">
                     🗓️ ตารางกิจกรรม
                 </a>
 
@@ -82,15 +69,14 @@
             </div>
         </div>
 
-        <a class="px-3 py-2 rounded-lg hover:bg-white/10 bg-white/10" href="/announcements">ประชาสัมพันธ์</a>
+        <a class="px-3 py-2 rounded-lg hover:bg-white/10 " href="/announcements">ประชาสัมพันธ์</a>
         </nav>
     </div>
     </header>
 
 
 
-
-                <!-- ===============================
+        <!-- ===============================
         MOBILE HEADER
 ================================= -->
 <header class="md:hidden sticky top-0 z-50 border-b text-white"
@@ -154,35 +140,96 @@
 
         <!-- Dropdown (improved) -->
         <div class="w-full">
-            <button class="dropdownBtn w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-white/10 ">
+            <button class="dropdownBtn w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-white/10 bg-white/10">
                 <span>📁 เกี่ยวกับ MSD</span>
                 <span class="arrow transition-transform">▾</span>
             </button>
 
             <div class="dropdownContent max-h-0 overflow-hidden transition-all duration-300 pl-6">
                 <a href="/gallery" class="block py-2 hover:text-yellow-300 ">📸 ภาพประกอบกิจกรรม</a>
-                <a href="/activity_schedule" class="block py-2 hover:text-yellow-300">🗓️ ตารางกิจกรรม</a>
+                <a href="/activity_schedule" class="block py-2 hover:text-yellow-300 bg-white/10">🗓️ ตารางกิจกรรม</a>
                 <a href="/club_organization_chart" class="block py-2 hover:text-yellow-300">🗓️ ผังองค์กรชมรม</a>
             </div>
         </div>
 
-        <a href="/announcements" class="px-3 py-2 rounded-lg hover:bg-white/10 bg-white/10">
+        <a href="/announcements" class="px-3 py-2 rounded-lg hover:bg-white/10 ">
             📣 ประชาสัมพันธ์
         </a>
 
     </nav>
 </div>
 
+    <!-- MAIN -->
+    <main>
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 mb-4">
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-800 flex items-center gap-2">
+                <span>📅</span>
+                <span>ตารางกิจกรรมชมรม MSD</span>
+            </h1>
+            
+        </section>
+            <!-- Month-Year Selector -->
+        
+<div class="flex justify-end pr-[10%] mt-4 mb-4 gap-2">
+    
+    <!-- dropdown เดือน -->
+    <select id="monthSelect"
+            class="border rounded-lg px-3 py-2 text-sm">
+            
+                <option value="0">มกราคม</option>
+                <option value="1">กุมภาพันธ์</option>
+                <option value="2">มีนาคม</option>
+                <option value="3">เมษายน</option>
+                <option value="4">พฤษภาคม</option>
+                <option value="5">มิถุนายน</option>
+                <option value="6">กรกฎาคม</option>
+                <option value="7">สิงหาคม</option>
+                <option value="8">กันยายน</option>
+                <option value="9">ตุลาคม</option>
+                <option value="10">พฤศจิกายน</option>
+                <option value="11">ธันวาคม</option>
+            
+        <!-- options -->
+    </select>
+
+    <!-- input ปี -->
+    <input type="number" id="yearSelect"
+            class="border rounded-lg px-3 py-2 text-sm w-24 placeholder="พ.ศ." ">
+
+    <!-- ปุ่มค้นหา -->
+    <button onclick="gotoMonthYear()"
+            class="bg-blue-600 text-white rounded-lg px-3 py-2 text-sm hover:bg-blue-700">
+        ค้นหา
+    </button>
+
+</div>
 
 
-    <main class="max-w-6xl mx-auto px-4 my-8 flex-1">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <h2 class="text-3xl font-extrabold text-blue-950">ประชาสัมพันธ์</h2>
-        <input id="q" class="px-4 py-2 rounded-xl border w-full sm:w-auto" placeholder="ค้นหาหัวข้อ..." />
+        <div id="calendar"></div>
+    </main>
+
+    <!-- POPUP แสดงกิจกรรมรายวัน -->
+    <!-- Modal แสดงกิจกรรมรายวัน -->
+<div id="eventDayModal"
+     class="fixed inset-0 bg-black/60 hidden z-50 flex items-center justify-center">
+    
+    <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-5 relative">
+
+        <!-- ปุ่มปิด -->
+        <button onclick="closeEventDayModal()"
+                class="absolute top-2 right-2 text-2xl text-gray-600 hover:text-red-600">
+            ✕
+        </button>
+
+        <h2 class="text-xl font-bold mb-4 text-blue-800">กิจกรรมประจำวัน</h2>
+
+        <div id="eventDayList" class="space-y-3 max-h-[300px] overflow-y-auto">
+            <!-- JS จะใส่ข้อมูลตรงนี้ -->
         </div>
 
-        <div id="grid" class="grid md:grid-cols-3 gap-5 mt-6"></div>
-    </main>
+    </div>
+</div>
+
 
     <footer class="mt-auto text-white text-sm"
         style="background:linear-gradient(90deg,var(--blue),var(--red))">
@@ -209,7 +256,29 @@
     </div>
 </footer>
 
-    <script src="/static/js/announcements.js"></script>
+    <script src="/static/js/events.js"></script>
     <script src="/static/js/nav.js"></script>
+    <script src="/static/js/admin.js"></script>
+    <script>
+        // ตั้งค่า default ให้แสดงเดือนและปีปัจจุบัน
+const monthSelect = document.getElementById("monthSelect");
+const yearSelect = document.getElementById("yearSelect");
+
+const currentMonthIndex = today.getMonth();
+const currentYearBE = today.getFullYear() + 543;
+
+// Set current values
+monthSelect.value = currentMonthIndex;
+yearSelect.value = currentYearBE;
+
+// Highlight current month
+monthSelect.options[currentMonthIndex].style.background = "#bfdbfe";  // ฟ้าอ่อน
+monthSelect.options[currentMonthIndex].style.fontWeight = "bold";
+
+// Highlight current year input border
+yearSelect.style.borderColor = "#2563eb"; // ฟ้าน้ำเงิน
+yearSelect.style.fontWeight = "bold";
+yearSelect.style.color = "#1e40af";
+    </script>
 </body>
 </html>

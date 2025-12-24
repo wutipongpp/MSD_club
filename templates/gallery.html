@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="th">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Gallery — รูปกิจกรรม</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" href="/static/picture/MSD.jpg">
+    <link rel="stylesheet" href="/static/css/nav.css">
+    <link rel="stylesheet" href="/static/css/footer.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    
+    <style>
+        /* small custom styles */
+        .album-card:hover .cover { transform: scale(1.03); }
+        .cover { transition: transform .25s ease; }
+        /* Masonry-ish layout for inner thumbnails */
+        .masonry { column-count: 2; column-gap: 1rem; }
+        @media(min-width: 768px){ .masonry { column-count: 3; } }
+        @media(min-width: 1024px){ .masonry { column-count: 4; } }
+        .masonry img { width: 100%; display: block; margin-bottom: 1rem; break-inside: avoid; }
+    :root {
+        --red: #c70707;
+        --blue: #2d32c7;
+        --yellow: #FDC500;
+        --bg: #FAFAFA;
+        }
+        body { background: var(--bg); }
+        body {
+        background: var(--bg);
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh; /* ✅ ทำให้เต็มจอ */
+        }
+        main {
+        flex: 1; /* ✅ ดัน footer ลงล่าง */
+        }
+        </style>
+        </head>
+        <body class="min-h-screen bg-gradient-to-b from-slate-50 to-white text-slate-800">
+        
+
+    <header class="hidden md:block sticky top-0 z-50 border-b text-white"
+            style="background:linear-gradient(90deg,var(--red),var(--blue))">
+    <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+
+        <!-- Logo -->
+        <a href="/" class="flex items-center gap-3">
+        <span class="w-10 h-10 rounded-xl overflow-hidden">
+            <img src="/static/picture/MSD.jpg" class="w-full h-full object-cover">
+        </span>
+        <div>
+            <div class="text-lg font-extrabold tracking-wide">MSD Club</div>
+            <div class="text-xs opacity-90">Math · Stat · Data Science</div>
+        </div>
+        </a>
+
+        <!-- Menu -->
+        <nav class="flex gap-1 items-center relative">
+
+        <a class="px-3 py-2 rounded-lg hover:bg-white/10 " href="/">หน้าหลัก</a>
+
+        <a class="px-3 py-2 rounded-lg hover:bg-white/10" href="/alumni">นิสิตเก่า</a>
+
+        <!-- Dropdown -->
+        <div class="relative group">
+            <button class="px-3 py-2 rounded-lg hover:bg-white/10 bg-white/10 flex items-center gap-1">
+                เกี่ยวกับ MSD ▾
+            </button>
+
+            <div class="absolute left-0 mt-2 w-56 rounded-xl shadow-lg py-2
+                        opacity-0 invisible group-hover:visible group-hover:opacity-100 
+                        transition-all duration-300 transform group-hover:translate-y-0 -translate-y-2"
+                style="
+                    background: linear-gradient(100deg, rgba(140, 45, 199, 0.95), rgba(36, 17, 180, 0.95));
+                    backdrop-filter: width(80px);
+                ">
+
+                <a href="/gallery" 
+                class="block px-4 py-2 text-white/90 hover:bg-white/10 bg-white/10 hover:text-white rounded-lg transition">
+                    📸 ภาพประกอบกิจกรรม
+                </a>
+
+                <a href="/activity_schedule" 
+                class="block px-4 py-2 text-white/90 hover:bg-white/10 hover:text-white rounded-lg transition">
+                    🗓️ ตารางกิจกรรม
+                </a>
+
+                <div class="border-t border-white/20 my-1"></div>
+
+                <a href="/club_organization_chart" 
+                class="block px-4 py-2 text-white/90 hover:bg-white/10 hover:text-white rounded-lg transition">
+                    🗓️  ผังองค์กรชมรม
+                </a>
+
+            </div>
+        </div>
+
+        <a class="px-3 py-2 rounded-lg hover:bg-white/10 " href="/announcements">ประชาสัมพันธ์</a>
+        </nav>
+    </div>
+    </header>
+
+
+
+
+        <!-- ===============================
+        MOBILE HEADER
+================================= -->
+<header class="md:hidden sticky top-0 z-50 border-b text-white"
+        style="background:linear-gradient(90deg,var(--red),var(--blue))">
+    <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+
+        <a href="/" class="flex items-center gap-3">
+            <span class="w-10 h-10 rounded-xl overflow-hidden shadow-md">
+                <img src="/static/picture/MSD.jpg" class="w-full h-full object-cover">
+            </span>
+            <div>
+                <div class="text-lg font-extrabold tracking-wide">MSD Club</div>
+                <div class="text-xs opacity-90">Math · Stat · Data Science</div>
+            </div>
+        </a>
+
+        <button id="menuBtn"
+                class="text-3xl p-2 rounded-lg active:scale-90 
+                       hover:bg-white/20 transition">
+            ☰
+        </button>
+    </div>
+</header>
+
+<!-- ===============================
+     NEW MOBILE OFFCANVAS MENU
+================================= -->
+<div id="mobileMenu"
+     class="fixed top-0 right-0 w-72 h-full z-[10000]
+            translate-x-full transition-transform duration-300
+            flex flex-col bg-gradient-to-b 
+            from-[var(--red)] to-[var(--blue)]
+            text-white shadow-[0_0_30px_rgba(0,0,0,0.45)] md:hidden">
+
+    <button id="closeMenu"
+            class="self-end text-4xl px-4 py-3 
+                   text-white hover:text-yellow-300 transition">
+        &times;
+    </button>
+
+    <!-- PROFILE HEADER -->
+    <div class="px-6 py-3 mb-3 flex items-center gap-3">
+        <span class="w-12 h-12 rounded-xl overflow-hidden shadow-lg border border-white/20">
+            <img src="/static/picture/MSD.jpg" class="w-full h-full object-cover">
+        </span>
+        <div>
+            <div class="text-xl font-extrabold drop-shadow">MSD Club Menu</div>
+            <div class="text-white/80 text-sm -mt-1">Math • Stat • Data Science</div>
+        </div>
+    </div>
+
+    <nav class="flex flex-col gap-2 px-4">
+
+        <a href="/" class="px-3 py-2 rounded-lg hover:bg-white/10">
+            🏠 หน้าหลัก
+        </a>
+
+        <a href="/alumni" class="px-3 py-2 rounded-lg hover:bg-white/10">
+            🎓 นิสิตเก่า
+        </a>
+
+        <!-- Dropdown (improved) -->
+        <div class="w-full">
+            <button class="dropdownBtn w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-white/10 bg-white/10">
+                <span>📁 เกี่ยวกับ MSD</span>
+                <span class="arrow transition-transform">▾</span>
+            </button>
+
+            <div class="dropdownContent max-h-0 overflow-hidden transition-all duration-300 pl-6">
+                <a href="/gallery" class="block py-2 hover:text-yellow-300 bg-white/10">📸 ภาพประกอบกิจกรรม</a>
+                <a href="/activity_schedule" class="block py-2 hover:text-yellow-300">🗓️ ตารางกิจกรรม</a>
+                <a href="/club_organization_chart" class="block py-2 hover:text-yellow-300">🗓️ ผังองค์กรชมรม</a>
+            </div>
+        </div>
+
+        <a href="/announcements" class="px-3 py-2 rounded-lg hover:bg-white/10">
+            📣 ประชาสัมพันธ์
+        </a>
+
+    </nav>
+</div>
+
+
+    <!-- Search bar -->
+    <div class="flex justify-end mt-4 mb-4" style="padding-right: 20%;">
+        <input id="search" type="text" placeholder="ค้นหาอัลบั้ม..."
+        class="px-4 py-2 w-40 sm:w-56 md:w-64 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-300 transition" />
+    </div>
+    <main class="max-w-7xl mx-auto px-6 py-10">
+        <!-- Albums grid -->
+        <section id="albums" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {% for album in albums %}
+        <article class="album-card bg-white rounded-2xl shadow-sm hover:shadow-lg overflow-hidden relative">
+            <!-- Card cover: show first image as cover or placeholder -->
+            <a href="#album-{{ album.folder }}" onclick="openAlbum(event, '{{ album.folder }}')" class="block">
+            <div class="h-44 md:h-56 w-full overflow-hidden relative">
+                {% if album.images and album.images|length > 0 %}
+                <img src="/static/{{ album.images[0] }}" alt="{{ album.name }}" class="cover w-full h-full object-cover">
+                {% else %}
+                <div class="w-full h-full flex items-center justify-center bg-slate-100 text-slate-400">ไม่มีรูป</div>
+                {% endif %}
+                <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 hover:opacity-100 transition-opacity"></div>
+            </div>
+            </a>
+
+            <div class="p-4">
+            <div class="flex items-center justify-between">
+                <div>
+                <h3 class="text-lg font-semibold leading-5">{{ album.name }}</h3>
+                <p class="text-sm text-slate-500 mt-1">{{ album.images|length }} รูป</p>
+                </div>
+                <div class="flex items-center gap-2">
+                <button onclick="openAlbum(event, '{{ album.folder }}')" class="px-3 py-1 rounded-full bg-indigo-600 text-white text-sm shadow">ดูอัลบั้ม</button>
+                </div>
+            </div>
+            </div>
+        </article>
+        {% endfor %}
+        </section>
+
+        <!-- Single album view (hidden by default) -->
+        <section id="album-view" class="hidden fixed inset-0 z-50 bg-black/80 p-6 overflow-auto">
+        <div class="max-w-6xl mx-auto bg-white rounded-2xl shadow-2xl overflow-hidden">
+            <div class="flex items-center justify-between p-4 border-b">
+            <h2 id="albumTitle" class="text-xl font-semibold">Album name</h2>
+            <div class="flex items-center gap-3">
+                <button id="prevBtn" class="px-3 py-1 rounded bg-slate-100">◀</button>
+                <button id="nextBtn" class="px-3 py-1 rounded bg-slate-100">▶</button>
+                <button id="closeBtn" class="px-3 py-1 rounded bg-red-500 text-white">ปิด</button>
+            </div>
+            </div>
+
+            <div class="p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Left: big preview -->
+            <div class="col-span-2">
+                <div id="previewWrap" class="w-full h-[60vh] bg-slate-50 rounded-lg flex items-center justify-center overflow-hidden">
+                <img id="previewImg" src="" alt="preview" class="max-h-full max-w-full object-contain">
+                </div>
+                <p id="previewCaption" class="mt-3 text-sm text-slate-600"></p>
+            </div>
+
+            <!-- Right: thumbnails (masonry) -->
+            <div>
+                <div id="thumbs" class="masonry p-1 max-h-[60vh] overflow-auto">
+                <!-- populated by JS -->
+                </div>
+            </div>
+            </div>
+        </div>
+        </section>
+
+    </main>
+
+    <footer class="mt-auto text-white text-sm"
+        style="background:linear-gradient(90deg,var(--blue),var(--red))">
+    <div class="max-w-6xl mx-auto px-4 py-6 text-center space-y-3">
+
+        <p class="opacity-90">ติดตามข่าวสารชมรม MSD ได้ที่</p>
+
+        <!-- Social Icons -->
+        <div class="flex justify-center gap-6 text-2xl">
+            <a href="https://www.facebook.com/profile.php?id=100095105160653" class="social-icon hover:text-yellow-300 transition" aria-label="Facebook">
+                <i class="fa-brands fa-facebook"></i>
+            </a>
+            <a href="https://www.instagram.com/msd.nu/" class="social-icon hover:text-yellow-300 transition" aria-label="Instagram">
+                <i class="fa-brands fa-instagram"></i>
+            </a>
+            <a href="https://www.tiktok.com/@msd.nu.official?is_from_webapp=1&sender_device=pc" class="social-icon hover:text-yellow-300 transition" aria-label="TikTok">
+                <i class="fa-brands fa-tiktok"></i>
+            </a>
+        </div>
+
+        <div>
+            © <span id="y"></span> MSD Club — Math • Stat • Data Science
+        </div>
+    </div>
+</footer>
+
+    <script>
+    // Wrap all initialization inside DOMContentLoaded so functions and element references exist
+    document.addEventListener('DOMContentLoaded', function(){
+    // Build albums object and expose to window for inline onclick handlers
+    window.albums = {};
+    {% for a in albums %}
+    window.albums['{{ a.folder }}'] = {
+        name: `{{ a.name }}`,
+        images: [{% for im in a.images %}`/static/{{ im }}`{% if not loop.last %}, {% endif %}{% endfor %}]
+    };
+    {% endfor %}
+
+    // Search filter
+    const searchInput = document.getElementById('search');
+    if (searchInput) {
+        searchInput.addEventListener('input', e => {
+        const q = e.target.value.toLowerCase().trim();
+        document.querySelectorAll('#albums article').forEach(card => {
+            const title = (card.querySelector('h3')?.innerText || '').toLowerCase();
+            card.style.display = title.includes(q) ? '' : 'none';
+        });
+        });
+    }
+
+    // Album modal state
+    window.currentAlbum = null;
+    window.currentIndex = 0;
+
+    // Expose functions to window so inline onclick can find them
+    window.openAlbum = function(e, folder){
+        if(e) e.preventDefault();
+        const album = window.albums[folder];
+        if(!album) return;
+        window.currentAlbum = album;
+        window.currentIndex = 0;
+        document.getElementById('albumTitle').innerText = album.name + ` — ${album.images.length} รูป`;
+
+        // populate thumbs
+        const thumbs = document.getElementById('thumbs');
+        thumbs.innerHTML = '';
+        album.images.forEach((src, idx) => {
+        const img = document.createElement('img');
+        img.src = src; img.loading = 'lazy';
+        img.className = 'rounded-lg cursor-pointer';
+        img.onclick = () => showIndex(idx);
+        thumbs.appendChild(img);
+        });
+
+        // show preview first image
+        showIndex(0);
+        document.getElementById('album-view').classList.remove('hidden');
+    };
+
+    window.closeAlbum = function(){
+        document.getElementById('album-view').classList.add('hidden');
+        // clear preview to free memory
+        const preview = document.getElementById('previewImg');
+        if(preview) preview.src = '';
+    };
+
+    window.showIndex = function(i){
+        if(!window.currentAlbum) return;
+        const album = window.currentAlbum;
+        if(i < 0) i = 0;
+        if(i >= album.images.length) i = album.images.length - 1;
+        window.currentIndex = i;
+        const src = album.images[i];
+        const preview = document.getElementById('previewImg');
+        if(preview) preview.src = src;
+        document.getElementById('previewCaption').innerText = `${i+1} / ${album.images.length}`;
+        // highlight thumb
+        const thumbsWrap = document.getElementById('thumbs');
+        Array.from(thumbsWrap.children).forEach((t,j)=> t.style.outline = j===i? '3px solid rgba(99,102,241,0.8)':'');
+    };
+
+    // Prev/Next buttons
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const closeBtn = document.getElementById('closeBtn');
+    if(prevBtn) prevBtn.addEventListener('click', ()=>{
+        if(!window.currentAlbum) return;
+        const len = window.currentAlbum.images.length;
+        showIndex((window.currentIndex-1+len)%len);
+    });
+    if(nextBtn) nextBtn.addEventListener('click', ()=>{
+        if(!window.currentAlbum) return;
+        const len = window.currentAlbum.images.length;
+        showIndex((window.currentIndex+1)%len);
+    });
+    if(closeBtn) closeBtn.addEventListener('click', ()=> closeAlbum());
+
+    // keyboard
+    window.addEventListener('keydown', e => {
+        const albumView = document.getElementById('album-view');
+        if(!albumView || albumView.classList.contains('hidden')) return;
+        if(e.key === 'ArrowLeft') prevBtn && prevBtn.click();
+        if(e.key === 'ArrowRight') nextBtn && nextBtn.click();
+        if(e.key === 'Escape') closeAlbum();
+    });
+
+    });
+</script>
+        <script>
+        // Open / Close menu
+        document.getElementById('menuBtn').onclick = () => {
+            mobileMenu.style.transform = "translateX(0)";
+        };
+        document.getElementById('closeMenu').onclick = () => {
+            mobileMenu.style.transform = "translateX(100%)";
+        };
+
+        // Dropdown logic
+        document.querySelectorAll(".dropdownBtn").forEach((btn, index) => {
+            btn.onclick = () => {
+                const content = btn.nextElementSibling;
+                const arrow = btn.querySelector(".arrow");
+
+                const isOpen = content.style.maxHeight && content.style.maxHeight !== "0px";
+
+                if (isOpen) {
+                    content.style.maxHeight = "0px";
+                    arrow.style.transform = "rotate(0deg)";
+                } else {
+                    content.style.maxHeight = content.scrollHeight + "px";
+                    arrow.style.transform = "rotate(180deg)";
+                }
+            };
+        });
+        </script>
+    <script>
+    // ✅ ตรวจสอบว่าผู้ใช้เป็นแอดมินหรือไม่
+    const isAdmin = JSON.parse(localStorage.getItem('msd:isAdmin') || 'false');
+
+    if (isAdmin) {
+        // หาปุ่มนำทาง (navbar)
+        const nav = document.querySelector('nav');
+
+        // ✅ สร้างปุ่ม "แอดมิน"
+        const adminLink = document.createElement('a');
+        adminLink.href = "/admin"; // ← ไปหน้าแอดมินของคุณ
+        adminLink.textContent = "⚙️ แอดมิน";
+        adminLink.className = "px-3 py-2 rounded-lg bg-yellow-400 text-blue-950 font-bold hover:bg-yellow-300 transition";
+
+        // ✅ แทรกไว้ท้าย nav
+        nav.appendChild(adminLink);
+    }
+    </script>
+</body>
+</html>

@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="th">
+<head>
+    <meta charset="utf-8">
+    <title>ผังองค์กรชมรม MSD ตัวเลขสร้างความรู้</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- ฟอนต์ -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/footer.css">
+    <link rel="icon" href="/static/picture/MSD.jpg">
+    <!-- ไฟล์ nav เดิมของคุณ -->
+    <link rel="stylesheet" href="/static/css/club-org.css">
+    <script src="/static/js/admin.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    
+    <script src="/static/js/footer.js"></script>
+</head>
+<body class="min-h-screen text-gray-900 antialiased">
+
+ <!-- ===============================
+        DESKTOP NAV
+    ================================= -->
+    <header class="hidden md:block sticky top-0 z-50 border-b text-white"
+            style="background:linear-gradient(90deg,var(--red),var(--blue))">
+    <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+
+        <!-- Logo -->
+        <a href="/" class="flex items-center gap-3">
+        <span class="w-10 h-10 rounded-xl overflow-hidden">
+            <img src="/static/picture/MSD.jpg" class="w-full h-full object-cover">
+        </span>
+        <div>
+            <div class="text-lg font-extrabold tracking-wide">MSD Club</div>
+            <div class="text-xs opacity-90">Math · Stat · Data Science</div>
+        </div>
+        </a>
+
+        <!-- Menu -->
+        <nav class="flex gap-1 items-center relative">
+
+        <a class="px-3 py-2 rounded-lg hover:bg-white/10 " href="/">หน้าหลัก</a>
+
+        <a class="px-3 py-2 rounded-lg hover:bg-white/10" href="/alumni">นิสิตเก่า</a>
+
+          <!-- Dropdown -->
+        <div class="relative group">
+            <button class="px-3 py-2 rounded-lg hover:bg-white/10 bg-white/10 flex items-center gap-1">
+                เกี่ยวกับ MSD ▾
+            </button>
+
+            <div class="absolute left-0 mt-2 w-56 rounded-xl shadow-lg py-2
+                        opacity-0 invisible group-hover:visible group-hover:opacity-100 
+                        transition-all duration-300 transform group-hover:translate-y-0 -translate-y-2"
+                style="
+                    background: linear-gradient(100deg, rgba(140, 45, 199, 0.95), rgba(36, 17, 180, 0.95));
+                    backdrop-filter: width(80px);
+                ">
+
+                <a href="/gallery" 
+                class="block px-4 py-2 text-white/90 hover:bg-white/10 hover:text-white rounded-lg transition">
+                    📸 ภาพประกอบกิจกรรม
+                </a>
+
+                <a href="/activity_schedule" 
+                class="block px-4 py-2 text-white/90 hover:bg-white/10 hover:text-white rounded-lg transition">
+                    🗓️ ตารางกิจกรรม
+                </a>
+
+                <div class="border-t border-white/20 my-1"></div>
+
+                <a href="/club_organization_chart" 
+                class="block px-4 py-2 text-white/90 hover:bg-white/10 bg-white/10 hover:text-white rounded-lg transition">
+                    🗓️  ผังองค์กรชมรม
+                </a>
+
+            </div>
+        </div>
+
+        <a class="px-3 py-2 rounded-lg hover:bg-white/10" href="/announcements">ประชาสัมพันธ์</a>
+        </nav>
+    </div>
+    </header>
+
+
+
+
+        <!-- ===============================
+                    MOBILE HEADER
+            ================================= -->
+            <header class="md:hidden sticky top-0 z-50 border-b text-white"
+                    style="background:linear-gradient(90deg,var(--red),var(--blue))">
+                <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+
+                <a href="/" class="flex items-center gap-3">
+                    <span class="w-10 h-10 rounded-xl overflow-hidden shadow-md">
+                    <img src="/static/picture/MSD.jpg" class="w-full h-full object-cover">
+                    </span>
+                    <div>
+                    <div class="text-lg font-extrabold tracking-wide">MSD Club</div>
+                    <div class="text-xs opacity-90">Math · Stat · Data Science</div>
+                    </div>
+                </a>
+
+                <button id="menuBtn"
+                        class="text-3xl p-2 rounded-lg active:scale-90 
+                                hover:bg-white/20 transition">
+                    ☰
+                </button>
+                </div>
+            </header>
+
+
+
+
+      <!-- ===============================
+          NEW MOBILE OFFCANVAS MENU
+      ================================= -->
+      <div id="mobileMenu"
+          class="fixed top-0 right-0 w-72 h-full z-[10000]
+                  translate-x-full transition-transform duration-300
+                  flex flex-col bg-gradient-to-b 
+                  from-[var(--red)] to-[var(--blue)]
+                  text-white shadow-[0_0_30px_rgba(0,0,0,0.45)] md:hidden">
+
+          <button id="closeMenu"
+                  class="self-end text-4xl px-4 py-3 
+                        text-white hover:text-yellow-300 transition">
+              &times;
+          </button>
+
+          <!-- PROFILE HEADER -->
+          <div class="px-6 py-3 mb-3 flex items-center gap-3">
+              <span class="w-12 h-12 rounded-xl overflow-hidden shadow-lg border border-white/20">
+                  <img src="/static/picture/MSD.jpg" class="w-full h-full object-cover">
+              </span>
+              <div>
+                  <div class="text-xl font-extrabold drop-shadow">MSD Club Menu</div>
+                  <div class="text-white/80 text-sm -mt-1">Math • Stat • Data Science</div>
+              </div>
+          </div>
+
+          <nav class="flex flex-col gap-2 px-4">
+
+              <a href="/" class="px-3 py-2 rounded-lg hover:bg-white/10">
+                  🏠 หน้าหลัก
+              </a>
+
+              <a href="/alumni" class="px-3 py-2 rounded-lg hover:bg-white/10">
+                  🎓 นิสิตเก่า
+              </a>
+
+              <!-- Dropdown (improved) -->
+              <div class="w-full">
+                  <button class="dropdownBtn w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-white/10 bg-white/10">
+                      <span>📁 เกี่ยวกับ MSD</span>
+                      <span class="arrow transition-transform">▾</span>
+                  </button>
+
+                  <div class="dropdownContent max-h-0 overflow-hidden transition-all duration-300 pl-6">
+                      <a href="/gallery" class="block py-2 hover:text-yellow-300 ">📸 ภาพประกอบกิจกรรม</a>
+                      <a href="/activity_schedule" class="block py-2 hover:text-yellow-300">🗓️ ตารางกิจกรรม</a>
+                      <a href="/club_organization_chart" class="block py-2 hover:text-yellow-300 bg-white/10">🗓️ ผังองค์กรชมรม</a>
+                  </div>
+              </div>
+
+              <a href="/announcements" class="px-3 py-2 rounded-lg hover:bg-white/10">
+                  📣 ประชาสัมพันธ์
+              </a>
+
+          </nav>
+      </div>
+
+<!-- ===============================
+      MAIN CONTENT
+================================= -->
+
+<div style=" padding-left: 5%; padding-right: 5%;">
+    <section class="hero-card fade-in-up organization-hero">
+    <div class="hero-glow-circle"></div>
+    <div class="hero-glow-circle-2"></div>
+
+    <div class="hero-inner organization-layout">
+        <div class="hero-main">
+            <span class="hero-tag">
+                🏛️ ผังองค์กร MSD Club
+            </span>
+
+            <h1 class="hero-title-gradient">
+                โครงสร้างองค์กรชมรม MSD ตัวเลขสร้างความรู้
+            </h1>
+
+            <p class="hero-sub">
+                ระบบจัดการชมรมอย่างเป็นรูปธรรม รองรับทุกปีการศึกษา  
+                เพื่อความโปร่งใส และสะดวกต่อการอ้างอิงข้อมูล
+            </p>
+
+            <div class="hero-divider"></div>
+
+            <div class="hero-info">
+                <span>ล่าสุด: ปีการศึกษา 2568</span>
+                <span class="separator">•</span>
+                <span>PDF อัปเดทอัตโนมัติ</span>
+            </div>
+        </div>
+
+        <div class="hero-visual">
+    <div class="org-card">
+        <div class="org-glow"></div>
+        <img src="/static/picture/MSD.jpg" class="org-logo">
+        <p class="org-quote">"Learning from Numbers, Growing with Data."</p>
+    </div>
+</div>
+
+        </div>
+</section>
+</div>
+<div style=" padding: 5%;">
+    <!-- Advisors -->
+    <section class="fade-in-up">
+        <h2 class="section-title">อาจารย์ที่ปรึกษาชมรม</h2>
+        <div class="advisor-grid">
+            <!-- Advisor 1 -->
+            <article class="advisor-card">
+                <div class="advisor-avatar-wrap">
+                    <img src="/static/images/professor/Chairat-Photoroom.png" alt="อาจารย์ที่ปรึกษา 1" class="advisor-avatar">
+                </div>
+                <h3 class="advisor-name">รศ.ดร.ชัยรัตน์ มดนาค</h3>
+                <span class="advisor-badge">อาจารย์ที่ปรึกษาหลัก</span>
+                <p class="advisor-role">ภาควิชา คณิตศาสตร์/คณะวิทยาศาสตร์</p>
+
+            </article>
+
+            <!-- Advisor 2 -->
+            <article class="advisor-card">
+                <div class="advisor-avatar-wrap">
+                    <img src="/static/images/professor/Watcharapong-Photoroom.png" alt="อาจารย์ที่ปรึกษา 2" class="advisor-avatar">
+                </div>
+                <h3 class="advisor-name">ผศ.ดร.วัชรพงษ์ อนรรฆเมธี</h3>
+                <span class="advisor-badge">อาจารย์ที่ปรึกษาหลัก</span>
+                <p class="advisor-role">ภาควิชา คณิตศาสตร์/คณะวิทยาศาสตร์ร์</p>
+
+            </article>
+
+            <!-- Advisor 3 -->
+            <article class="advisor-card">
+                <div class="advisor-avatar-wrap">
+                    <img src="/static/images/professor/Ekkachai-Photoroom.png" alt="อาจารย์ที่ปรึกษา 3" class="advisor-avatar">
+                </div>
+                <h3 class="advisor-name">ผศ.ดร.เอกชัย หลายศิริกุล</h3>
+                <span class="advisor-badge">อาจารย์ที่ปรึกษาหลัก</span>
+                <p class="advisor-role">ภาควิชา คณิตศาสตร์/คณะวิทยาศาสตร์</p>
+
+            </article>
+        </div>
+    </section>
+
+   <!-- Year + Button -->
+<section class="fade-in-up year-module">
+    <div class="year-header">
+        <h2 class="section-title">เลือกปีการศึกษาที่ต้องการดูผังองค์กร</h2>
+        <div class="year-line"></div>
+        <p class="year-detail">ระบบจะเปิดไฟล์ PDF ผังองค์กรของปีการศึกษาที่คุณเลือกในแท็บใหม่</p>
+    </div>
+
+    <div class="year-timeline">
+        <div class="dot active"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+    </div>
+
+    <div class="year-panel">
+        <select id="orgYear" class="year-select-pro">
+            <option value="2568">ปีการศึกษา 2568</option>
+            <option value="2567">ปีการศึกษา 2567</option>
+            <option value="2566">ปีการศึกษา 2566</option>
+        </select>
+
+        <button id="viewOrgBtn" class="main-btn-pro">
+            <span class="btn-icon">📄</span> ดูผังองค์กร (PDF)
+        </button>
+    </div>
+</section>
+
+</div>
+<footer class="mt-auto text-white text-sm"
+        style="background:linear-gradient(90deg,var(--blue),var(--red))">
+    <div class="max-w-6xl mx-auto px-4 py-6 text-center space-y-3">
+
+        <p class="opacity-90">ติดตามข่าวสารชมรม MSD ได้ที่</p>
+
+        <!-- Social Icons -->
+        <div class="flex justify-center gap-6 text-2xl">
+            <a href="https://www.facebook.com/profile.php?id=100095105160653" class="social-icon hover:text-yellow-300 transition" aria-label="Facebook">
+                <i class="fa-brands fa-facebook"></i>
+            </a>
+            <a href="https://www.instagram.com/msd.nu/" class="social-icon hover:text-yellow-300 transition" aria-label="Instagram">
+                <i class="fa-brands fa-instagram"></i>
+            </a>
+            <a href="https://www.tiktok.com/@msd.nu.official?is_from_webapp=1&sender_device=pc" class="social-icon hover:text-yellow-300 transition" aria-label="TikTok">
+                <i class="fa-brands fa-tiktok"></i>
+            </a>
+        </div>
+
+        <div>
+            © <span id="y"></span> MSD Club — Math • Stat • Data Science
+        </div>
+    </div>
+</footer>
+
+<script>
+    // เปิด PDF ตามปีที่เลือก
+    document.getElementById("viewOrgBtn").addEventListener("click", function () {
+        var year = document.getElementById("orgYear").value;
+        var url = "/static/pdf/org_" + year + ".pdf";
+        window.open(url, "_blank");
+    });
+
+    // Scroll animation: add .in-view เมื่ออยู่ใน viewport
+    const fadeElems = document.querySelectorAll(".fade-in-up");
+
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add("in-view");
+                observer.unobserve(entry.target); // เล่นครั้งเดียวต่อ element
+            }
+        });
+    }, {
+        threshold: 0.2
+    });
+
+    fadeElems.forEach(el => observer.observe(el));
+</script>
+<script>
+    // Open / Close menu
+        document.getElementById('menuBtn').onclick = () => {
+            mobileMenu.style.transform = "translateX(0)";
+        };
+        document.getElementById('closeMenu').onclick = () => {
+            mobileMenu.style.transform = "translateX(100%)";
+        };
+
+        // Dropdown logic
+        document.querySelectorAll(".dropdownBtn").forEach((btn, index) => {
+            btn.onclick = () => {
+                const content = btn.nextElementSibling;
+                const arrow = btn.querySelector(".arrow");
+
+                const isOpen = content.style.maxHeight && content.style.maxHeight !== "0px";
+
+                if (isOpen) {
+                    content.style.maxHeight = "0px";
+                    arrow.style.transform = "rotate(0deg)";
+                } else {
+                    content.style.maxHeight = content.scrollHeight + "px";
+                    arrow.style.transform = "rotate(180deg)";
+                }
+            };
+        });
+</script>
+<script>
+    // Scroll animation for advisor cards
+const advisorCards = document.querySelectorAll(".advisor-card");
+advisorCards.forEach((card, i) => {
+    card.style.transitionDelay = `${i * 120}ms`;
+    observer.observe(card);
+});
+
+</script>
+</body>
+</html>

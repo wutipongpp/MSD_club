@@ -1,22 +1,28 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
+import shutil
+import re
+import unicodedata
 import os
 import sqlite3
 from datetime import datetime
 from werkzeug.utils import secure_filename
 
-app = Flask(__name__, static_folder="static", template_folder="templates")
 
-# 📂 โฟลเดอร์เก็บรูป
-UPLOAD_FOLDER = os.path.join(app.static_folder, "uploads")
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-
-# ✅ ประเภทไฟล์ที่อนุญาต
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
-
-def allowed_file(filename):
+app = Flask(__name__, static_folder="static", template_folder="templates") 
+app.secret_key = "mysecretkey" 
+BASE_DIR = os.path.abspath(os.path.dirname(__file__)) 
+# 📂 โฟลเดอร์รูปกิจกรรม (Event) 
+EVENT_GALLERY = os.path.join(app.static_folder, "gallery") 
+os.makedirs(EVENT_GALLERY, exist_ok=True) 
+# 📂 โฟลเดอร์รูปโพสต์ (Announcements / Posts) 
+UPLOAD_FOLDER = os.path.join(app.static_folder, "uploads") 
+os.makedirs(UPLOAD_FOLDER, exist_ok=True) 
+# บอก Flask ให้รู้ว่าเวลา upload รูปของโพสต์ ให้เก็บที่ uploads 
+app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER 
+# ประเภทไฟล์ที่อนุญาต 
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'} 
+def allowed_file(filename): 
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-
 # ================================
 # 🧱 ส่วนฐานข้อมูล
 # ================================
@@ -63,6 +69,51 @@ with get_db() as db:
     """)
     db.commit()
 
+# db ตรางกิจกรรม
+
+conn = sqlite3.connect("msd.db")
+cur = conn.cursor()
+
+cur.execute("PRAGMA foreign_keys = OFF")
+
+# โครงสร้าง events ที่ถูกต้องและสมบูรณ์
+cur.execute("""
+CREATE TABLE IF NOT EXISTS events_new (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    date TEXT NOT NULL,       -- วันเริ่ม
+    end_date TEXT,            -- วันจบ
+    description TEXT,
+    folder_name TEXT,         -- ชื่อโฟลเดอร์กิจกรรม
+    color TEXT                -- สีป้ายในปฏิทิน
+)
+""")
+
+# ย้ายข้อมูลเดิม (เฉพาะที่มีในตารางเก่า)
+try:
+    cur.execute("""
+    INSERT INTO events_new (id, title, date, end_date, description, folder_name, color)
+    SELECT id, title, date, end_date, description, folder_name, color
+    FROM events
+
+    """)
+except Exception:
+    print("⚠ ไม่มีข้อมูลตรงกันให้ย้าย ไม่เป็นไร")
+
+# ลบตารางเก่าและแทนที่ด้วยตารางใหม่
+cur.execute("DROP TABLE IF EXISTS events")
+cur.execute("ALTER TABLE events_new RENAME TO events")
+
+cur.execute("PRAGMA foreign_keys = ON")
+conn.commit()
+conn.close()
+
+print("✔ อัปเดตโครงสร้าง events เรียบร้อย!")
+
+
+
+
+
 # ================================
 # 🌐 ROUTES (หน้าเว็บ)
 # ================================
@@ -81,6 +132,21 @@ def announcements():
 @app.route('/admin')
 def admin():
     return render_template('admin.html')
+
+@app.route("/admin")
+def admin_redirect():
+    return redirect("/admin/events")
+
+
+@app.route("/activity_schedule")
+def activity_schedule():
+    return render_template("event.html")
+
+@app.route("/club_organization_chart")
+def club_organization_chart():
+    return render_template("club_organization_chart.html")
+
+
 
 @app.route('/post/<int:post_id>')
 def posts(post_id):
@@ -103,7 +169,6 @@ def get_alumnus_by_id(student_id):
         if alumnus["image"]:
             alumnus["image"] = f"/static/alumni_photos/{alumnus['image']}"
         return jsonify(alumnus), 200
-
 
 
 # ================================
@@ -550,6 +615,322 @@ def get_batches_fixed():
 
     return jsonify(years)
 
+# gallery
+@app.route("/gallery")
+def gallery():
+    base_path = os.path.join(app.static_folder, "gallery")
+
+    albums = []
+
+    for folder in os.listdir(base_path):
+        folder_path = os.path.join(base_path, folder)
+
+        if os.path.isdir(folder_path):
+
+            # ดึงวันที่แก้ไขโฟลเดอร์ล่าสุด
+            timestamp = os.path.getmtime(folder_path)
+            date_str = datetime.fromtimestamp(timestamp).strftime("%d/%m/%Y")
+
+
+            images = [
+                f"gallery/{folder}/{img}"
+                for img in os.listdir(folder_path)
+                if img.lower().endswith((".jpg", ".jpeg", ".png", ".webp"))
+            ]
+
+            albums.append({
+                "folder": folder,
+                "name": folder.replace("_", " ").title(),
+                "images": images,
+                "date": date_str   # ← ส่งให้ template ใช้
+            })
+
+    return render_template("gallery.html", albums=albums)
+
+
+
+    #event
+PINNED_TITLES = [
+    "กิจกรรม MSD พิเศษ",
+    "กิจกรรมสำคัญประจำปี"
+]
+
+
+
+def slugify(text):
+    text = unicodedata.normalize('NFKD', text)
+    text = re.sub(r"[^0-9A-Za-zก-ฮะ-์\s_-]", "", text)
+    return text.strip().replace(" ", "_")[:80]
+
+
+@app.route("/admin/add_event", methods=["POST"])
+def add_event():
+    title = request.form.get("title", "").strip()
+    start_date = request.form.get("date")
+    end_date = request.form.get("end_date") or start_date
+    desc = request.form.get("description", "").strip()
+    color = (
+    request.form.get("color") or
+    request.form.get("editColor"))
+
+    files = request.files.getlist("gallery[]")
+
+    if not title or not start_date:
+        flash("กรุณากรอกข้อมูลให้ครบ")
+        return redirect("/admin/events")
+
+    conn = sqlite3.connect(DB_FILE)
+    cur = conn.cursor()
+    cur.execute(
+        "INSERT INTO events (title, date, end_date, description, color) VALUES (?, ?, ?, ?, ?)",
+        (title, start_date, end_date, desc, color)
+    )
+    event_id = cur.lastrowid
+    conn.commit()
+
+    folder_name = f"{start_date}-{slugify(title)}-{event_id}"
+    folder_path = os.path.join(EVENT_GALLERY, folder_name)
+    os.makedirs(folder_path, exist_ok=True)
+
+    cur.execute("UPDATE events SET folder_name=? WHERE id=?", (folder_name, event_id))
+    conn.commit()
+    conn.close()
+
+    for f in files:
+        if f.filename:
+            filename = secure_filename(f.filename)
+            f.save(os.path.join(folder_path, filename))
+
+    return redirect("/admin/events")
+
+
+@app.route("/admin/edit_event/<int:id>", methods=["POST"])
+def edit_event(id):
+    data = request.get_json()
+    title = data.get("title", "").strip()
+    start_date = data.get("start_date")
+    end_date = data.get("end_date") or start_date
+    desc = data.get("desc", "")
+    color = data.get("color")
+
+
+    new_folder_name = f"{start_date}-{slugify(title)}-{id}"
+
+    conn = sqlite3.connect(DB_FILE)
+    cur = conn.cursor()
+    cur.execute("SELECT folder_name FROM events WHERE id=?", (id,))
+    row = cur.fetchone()
+    old_folder_name = row[0] if row else ""
+
+    old_path = os.path.join(EVENT_GALLERY, old_folder_name)
+    new_path = os.path.join(EVENT_GALLERY, new_folder_name)
+
+    if old_folder_name and os.path.exists(old_path):
+        try:
+            os.rename(old_path, new_path)
+        except:
+            pass
+
+    cur.execute("""
+        UPDATE events SET
+            title=?, date=?, end_date=?, description=?, folder_name=?, color=?
+        WHERE id=?
+    """, (
+        title, start_date, end_date, desc, new_folder_name, color, id
+    ))
+    conn.commit()
+    conn.close()
+
+    return "", 204
+
+
+@app.route("/event/<folder_name>")
+def event_detail(folder_name):
+    conn = sqlite3.connect(DB_FILE)
+    cur = conn.cursor()
+    cur.execute("SELECT id, title, date, end_date, description FROM events WHERE folder_name=?", (folder_name,))
+    event = cur.fetchone()
+    conn.close()
+
+    if not event:
+        return "ไม่พบกิจกรรม", 404
+
+    event_id, title, start_date, end_date, desc = event
+
+    folder_path = os.path.join(EVENT_GALLERY, folder_name)
+    images = []
+    if os.path.isdir(folder_path):
+        images = [f for f in os.listdir(folder_path)
+                  if f.lower().endswith((".jpg", ".jpeg", ".png", ".gif"))]
+
+    return render_template(
+        "event_detail.html",
+        title=title,
+        start_date=start_date,
+        end_date=end_date,
+        desc=desc,
+        images=images,
+        folder=folder_name
+    )
+
+
+
+@app.route("/get_events")
+def get_events():
+    conn = sqlite3.connect(DB_FILE)
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT
+            id,
+            title,
+            COALESCE(description, ''),
+            date AS start_date,
+            COALESCE(end_date, date) AS end_date,
+            COALESCE(folder_name, ''),
+            color
+        FROM events
+        ORDER BY date ASC, id ASC
+
+    """)
+
+    rows = cur.fetchall()
+    conn.close()
+
+    events = []
+    for r in rows:
+        events.append({
+            "id": r[0],
+            "title": r[1],
+            "desc": r[2],
+            "start_date": r[3],
+            "end_date": r[4],
+            "folder": r[5],
+            "color": r[6]
+        })
+
+    return jsonify(events)
+
+
+
+
+def ensure_event_columns():
+    conn = sqlite3.connect(DB_FILE)
+    cur = conn.cursor()
+    cur.execute("PRAGMA table_info(events)")
+    cols = [c[1] for c in cur.fetchall()]
+
+    if "folder_name" not in cols:
+        cur.execute("ALTER TABLE events ADD COLUMN folder_name TEXT")
+        print("เพิ่ม column folder_name สำเร็จ!")
+
+    if "end_date" not in cols:
+        cur.execute("ALTER TABLE events ADD COLUMN end_date TEXT")
+        print("เพิ่ม column end_date สำเร็จ!")
+
+    if "color" not in cols:
+        cur.execute("ALTER TABLE events ADD COLUMN color TEXT")
+        print("เพิ่ม column color สำเร็จ!")
+
+    conn.commit()
+    conn.close()
+
+
+def fix_missing_event_data():
+    conn = sqlite3.connect(DB_FILE)
+    cur = conn.cursor()
+
+    # end_date ว่าง → ใส่ start_date
+    cur.execute("""
+        UPDATE events
+        SET end_date = date
+        WHERE end_date IS NULL OR end_date = ''
+    """)
+
+    # folder_name ว่าง → สร้างใหม่
+    cur.execute("SELECT id, title, date FROM events WHERE folder_name IS NULL OR folder_name = ''")
+    rows = cur.fetchall()
+
+    for id, title, start_date in rows:
+        folder_name = f"{start_date}-{slugify(title)}-{id}"
+        cur.execute("UPDATE events SET folder_name=? WHERE id=?", (folder_name, id))
+
+    conn.commit()
+    conn.close()
+    print("🧩 ซ่อมข้อมูล event ที่หายครบแล้ว!")
+
+
+fix_missing_event_data()
+ensure_event_columns()
+
+
+
+@app.route("/admin/events")
+def admin_events():
+    conn = sqlite3.connect(DB_FILE)
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT id, title, date, COALESCE(end_date, date), 
+               COALESCE(description,''), COALESCE(folder_name,''), COALESCE(color,'#f97316')
+        FROM events
+        ORDER BY id DESC
+    """)
+    rows = cur.fetchall()
+    conn.close()
+
+    events = []
+    for r in rows:
+        events.append({
+            "id": r[0],
+            "title": r[1],
+            "start_date": r[2],
+            "end_date": r[3],
+            "desc": r[4],
+            "folder": r[5],
+            "color": r[6]
+        })
+
+    return render_template("admin.html", events=events)
+
+
+
+@app.route("/admin/delete_event/<int:id>", methods=["POST"])
+def delete_event(id):
+    conn = sqlite3.connect(DB_FILE)
+    cur = conn.cursor()
+    cur.execute("SELECT folder_name FROM events WHERE id=?", (id,))
+    row = cur.fetchone()
+    
+    if not row:
+        conn.close()
+        return redirect("/admin/events")
+    
+    folder_name = row[0]
+    
+    # ลบรูปในโฟลเดอร์ถ้ามี
+    if folder_name:
+        folder_path = os.path.join("static", "gallery", folder_name)
+        if os.path.exists(folder_path):
+            try:
+                shutil.rmtree(folder_path)
+            except Exception as e:
+                print("⚠ Error deleting folder:", e)
+
+    # ลบข้อมูล DB
+    cur.execute("DELETE FROM events WHERE id=?", (id,))
+    conn.commit()
+    conn.close()
+
+    return redirect("/admin/events")
+
+
+
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    import os
+    app.run(
+        host="0.0.0.0",
+        port=int(os.environ.get("PORT", 5000)),
+        debug=False
+    )
+

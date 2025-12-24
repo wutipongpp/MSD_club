@@ -1,0 +1,104 @@
+    .profile-img {
+    width: 240px;
+    margin: 0 auto;
+    transition: transform .3s ease;
+    }
+
+    /* Hover effect */
+    .profile-img:hover {
+    transform: scale(1.05);
+    }
+
+    .profile-img-r {
+    width: 240px;
+    margin: 0 auto;
+    transition: transform .3s ease;
+    }
+
+    /* Hover effect */
+    .profile-img-r:hover {
+    transform: scale(1.05);
+    }
+    
+    /* =========== Desktop ขึ้นไป =========== */
+    @media (min-width: 1024px) {
+    .profile-section {
+        position: relative;
+        min-height: 300px;
+        overflow: visible;
+        display: flex;
+        align-items: center;
+    }
+    .profile-section-r {
+        position: relative;
+        min-height: 300px;
+        overflow: visible;
+        display: flex;
+        align-items: center;
+    }
+    .profile-img {
+        position: absolute;
+        min-height: 350px;
+        bottom: 0;
+        left: 10%;
+        width: 350px;
+        margin: 0;
+    }
+    .profile-img-r {
+        position: absolute;
+        min-height: 350px;
+        bottom: 0;
+        right: 15%;
+        width: 350px;
+        margin: 0;
+    }
+    /* เว้นพื้นที่ให้ text ไม่ทับรูป */
+    .profile-text {
+        margin-left: 360px;
+        padding-top: 40px;
+    }
+
+    .profile-text-r {
+        margin-right: 360px;
+        padding-top: 40px;
+    }
+    }
+
+    /* =========== Mobile & Tablet =========== */
+    @media (max-width: 1024px) {
+    .profile-section {
+        min-height: 250px;
+        padding: 2.5rem 0;
+        text-align: center;
+    }
+    .profile-section-r {
+            min-height: 250px;
+            padding: 2.5rem 0;
+            text-align: center;
+        }
+    .profile-img {
+        min-height: 300px;
+        bottom: 0;
+        width: 300px;
+    }
+    .profile-img-r {
+        min-height: 300px;
+        bottom: 0;
+        width: 300px;
+    }
+    .profile-text {
+        margin-top: 1.5rem;
+    }
+    .profile-text-r {
+        margin-top: 1.5rem;
+    }
+    /* Mobile & Tablet */
+.order-img {
+  order: 1; /* รูปบน */
+}
+.order-text {
+  order: 2; /* ข้อความล่าง */
+}
+
+
+    }

@@ -1,32 +1,4 @@
-<!doctype html>
-<html lang="th">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>MSD Club — ประชาสัมพันธ์</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="icon" href="/static/picture/MSD.jpg">
-    <link rel="stylesheet" href="/static/css/nav.css">
-    <link rel="stylesheet" href="/static/css/footer.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-    
-    <style>
-        :root {
-        --red: #c70707;
-        --blue: #2d32c7;
-        --yellow: #FDC500;
-        --bg: #FAFAFA;
-        }
-        body { background: var(--bg); }
-        .card { border-radius: 1rem; border: 1px solid #e5e7eb; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-    </style>
-    </head>
-
-    <body class="flex flex-col min-h-screen text-slate-900 bg-[var(--bg)]">
-        <!-- ===============================
-        DESKTOP NAV
-    ================================= -->
-    <header class="hidden md:block sticky top-0 z-50 border-b text-white"
+<header class="hidden md:block sticky top-0 z-50 border-b text-white"
             style="background:linear-gradient(90deg,var(--red),var(--blue))">
     <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
 
@@ -89,8 +61,7 @@
 
 
 
-
-                <!-- ===============================
+        <!-- ===============================
         MOBILE HEADER
 ================================= -->
 <header class="md:hidden sticky top-0 z-50 border-b text-white"
@@ -172,44 +143,3 @@
 
     </nav>
 </div>
-
-
-
-    <main class="max-w-6xl mx-auto px-4 my-8 flex-1">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <h2 class="text-3xl font-extrabold text-blue-950">ประชาสัมพันธ์</h2>
-        <input id="q" class="px-4 py-2 rounded-xl border w-full sm:w-auto" placeholder="ค้นหาหัวข้อ..." />
-        </div>
-
-        <div id="grid" class="grid md:grid-cols-3 gap-5 mt-6"></div>
-    </main>
-
-    <footer class="mt-auto text-white text-sm"
-        style="background:linear-gradient(90deg,var(--blue),var(--red))">
-    <div class="max-w-6xl mx-auto px-4 py-6 text-center space-y-3">
-
-        <p class="opacity-90">ติดตามข่าวสารชมรม MSD ได้ที่</p>
-
-        <!-- Social Icons -->
-        <div class="flex justify-center gap-6 text-2xl">
-            <a href="https://www.facebook.com/profile.php?id=100095105160653" class="social-icon hover:text-yellow-300 transition" aria-label="Facebook">
-                <i class="fa-brands fa-facebook"></i>
-            </a>
-            <a href="https://www.instagram.com/msd.nu/" class="social-icon hover:text-yellow-300 transition" aria-label="Instagram">
-                <i class="fa-brands fa-instagram"></i>
-            </a>
-            <a href="https://www.tiktok.com/@msd.nu.official?is_from_webapp=1&sender_device=pc" class="social-icon hover:text-yellow-300 transition" aria-label="TikTok">
-                <i class="fa-brands fa-tiktok"></i>
-            </a>
-        </div>
-
-        <div>
-            © <span id="y"></span> MSD Club — Math • Stat • Data Science
-        </div>
-    </div>
-</footer>
-
-    <script src="/static/js/announcements.js"></script>
-    <script src="/static/js/nav.js"></script>
-</body>
-</html>

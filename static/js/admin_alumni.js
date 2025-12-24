@@ -101,6 +101,22 @@ const batchForm = document.getElementById('batchForm');
 const batchYear = document.getElementById('batchYear');
 const saveBatchBtn = document.getElementById('saveBatchBtn');
 const cancelBatchBtn = document.getElementById('cancelBatchBtn');
+const q = document.getElementById("q");
+
+// ฟังก์ชันค้นหา batch
+    q.addEventListener("input", () => {
+    const keyword = q.value.trim();
+
+    // ถ้า input ว่าง → แสดง batch ทั้งหมด
+    if (!keyword) return renderBatches();
+
+    // กรอง batches ที่มี keyword ตรงกับปี
+    const filtered = batches.filter(b => b.toString().includes(keyword));
+
+    // แสดงผลลัพธ์
+    renderBatches(filtered);
+    });
+
 
     // 🧱 Modal สำหรับเพิ่มสมาชิก
     const memberModal = document.createElement('div');

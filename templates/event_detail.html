@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="/static/js/admin.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/static/css/nav.css">
+    <link rel="icon" href="/static/picture/MSD.jpg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/static/css/events.css">
+    <link rel="stylesheet" href="/static/css/footer.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <!-- ฟอนต์ -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* 🎨 Custom Variables */
+        :root {
+            --red: #c70707;
+            --blue: #2d32c7;
+            --yellow: #FDC500;
+        }
+
+        /* 🌈 Background Gradient & Typography */
+        body {
+            background: linear-gradient(180deg, #ffffff, #f0f4ff); /* โทนสีอ่อนโยนขึ้น */
+            font-family: 'Anuphan', 'Sarabun', sans-serif; /* เพิ่ม Font-family หากใช้ */
+        }
+
+        /* ✨ Gallery Hover Effect */
+        .gallery-img-wrapper {
+            transition: transform .3s ease, box-shadow .3s ease;
+        }
+        .gallery-img-wrapper:hover {
+            transform: translateY(-5px) scale(1.02); /* ยกขึ้นเล็กน้อยและขยาย */
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        /* 🖼️ Modal Animation */
+        #imgModal.is-opening {
+             /* กำหนดให้เริ่มจาก opacity 0 แต่ยังคงเป็น flex */
+            opacity: 0;
+            display: flex !important; 
+        }
+        #imgModal.is-closing {
+            opacity: 0;
+            transition: opacity .3s ease-out;
+        }
+
+        #modalImg.is-loading {
+            opacity: 0.2;
+            filter: blur(5px);
+            transition: opacity .3s, filter .3s;
+        }
+
+    </style>
+</head>
+<body class="min-h-screen text-gray-900 antialiased">
+    <header class="hidden md:block sticky top-0 z-50 border-b text-white"
+            style="background:linear-gradient(90deg,var(--red),var(--blue))">
+    <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+
+        <!-- Logo -->
+        <a href="/" class="flex items-center gap-3">
+        <span class="w-10 h-10 rounded-xl overflow-hidden">
+            <img src="/static/picture/MSD.jpg" class="w-full h-full object-cover">
+        </span>
+        <div>
+            <div class="text-lg font-extrabold tracking-wide">MSD Club</div>
+            <div class="text-xs opacity-90">Math · Stat · Data Science</div>
+        </div>
+        </a>
+
+        <!-- Menu -->
+        <nav class="flex gap-1 items-center relative">
+
+        <a class="px-3 py-2 rounded-lg hover:bg-white/10 " href="/">หน้าหลัก</a>
+
+        <a class="px-3 py-2 rounded-lg hover:bg-white/10" href="/alumni">นิสิตเก่า</a>
+
+          <!-- Dropdown -->
+        <div class="relative group">
+            <button class="px-3 py-2 rounded-lg hover:bg-white/10 bg-white/10 flex items-center gap-1">
+                เกี่ยวกับ MSD ▾
+            </button>
+
+            <div class="absolute left-0 mt-2 w-56 rounded-xl shadow-lg py-2
+                        opacity-0 invisible group-hover:visible group-hover:opacity-100 
+                        transition-all duration-300 transform group-hover:translate-y-0 -translate-y-2"
+                style="
+                    background: linear-gradient(100deg, rgba(140, 45, 199, 0.95), rgba(36, 17, 180, 0.95));
+                    backdrop-filter: width(80px);
+                ">
+
+                <a href="/gallery" 
+                class="block px-4 py-2 text-white/90 hover:bg-white/10 hover:text-white rounded-lg transition">
+                    📸 ภาพประกอบกิจกรรม
+                </a>
+
+                <a href="/activity_schedule" 
+                class="block px-4 py-2 text-white/90 hover:bg-white/10 bg-white/10 hover:text-white rounded-lg transition">
+                    🗓️ ตารางกิจกรรม
+                </a>
+
+                <div class="border-t border-white/20 my-1"></div>
+
+                <a href="/club_organization_chart" 
+                class="block px-4 py-2 text-white/90 hover:bg-white/10 hover:text-white rounded-lg transition">
+                    🗓️  ผังองค์กรชมรม
+                </a>
+
+            </div>
+        </div>
+
+        <a class="px-3 py-2 rounded-lg hover:bg-white/10 " href="/announcements">ประชาสัมพันธ์</a>
+        </nav>
+    </div>
+    </header>
+
+
+
+        <!-- ===============================
+        MOBILE HEADER
+================================= -->
+<header class="md:hidden sticky top-0 z-50 border-b text-white"
+        style="background:linear-gradient(90deg,var(--red),var(--blue))">
+    <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+
+        <a href="/" class="flex items-center gap-3">
+            <span class="w-10 h-10 rounded-xl overflow-hidden shadow-md">
+                <img src="/static/picture/MSD.jpg" class="w-full h-full object-cover">
+            </span>
+            <div>
+                <div class="text-lg font-extrabold tracking-wide">MSD Club</div>
+                <div class="text-xs opacity-90">Math · Stat · Data Science</div>
+            </div>
+        </a>
+
+        <button id="menuBtn"
+                class="text-3xl p-2 rounded-lg active:scale-90 
+                       hover:bg-white/20 transition">
+            ☰
+        </button>
+    </div>
+</header>
+
+<!-- ===============================
+     NEW MOBILE OFFCANVAS MENU
+================================= -->
+<div id="mobileMenu"
+     class="fixed top-0 right-0 w-72 h-full z-[10000]
+            translate-x-full transition-transform duration-300
+            flex flex-col bg-gradient-to-b 
+            from-[var(--red)] to-[var(--blue)]
+            text-white shadow-[0_0_30px_rgba(0,0,0,0.45)] md:hidden">
+
+    <button id="closeMenu"
+            class="self-end text-4xl px-4 py-3 
+                   text-white hover:text-yellow-300 transition">
+        &times;
+    </button>
+
+    <!-- PROFILE HEADER -->
+    <div class="px-6 py-3 mb-3 flex items-center gap-3">
+        <span class="w-12 h-12 rounded-xl overflow-hidden shadow-lg border border-white/20">
+            <img src="/static/picture/MSD.jpg" class="w-full h-full object-cover">
+        </span>
+        <div>
+            <div class="text-xl font-extrabold drop-shadow">MSD Club Menu</div>
+            <div class="text-white/80 text-sm -mt-1">Math • Stat • Data Science</div>
+        </div>
+    </div>
+
+    <nav class="flex flex-col gap-2 px-4">
+
+        <a href="/" class="px-3 py-2 rounded-lg hover:bg-white/10">
+            🏠 หน้าหลัก
+        </a>
+
+        <a href="/alumni" class="px-3 py-2 rounded-lg hover:bg-white/10">
+            🎓 นิสิตเก่า
+        </a>
+
+        <!-- Dropdown (improved) -->
+        <div class="w-full">
+            <button class="dropdownBtn w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-white/10 bg-white/10">
+                <span>📁 เกี่ยวกับ MSD</span>
+                <span class="arrow transition-transform">▾</span>
+            </button>
+
+            <div class="dropdownContent max-h-0 overflow-hidden transition-all duration-300 pl-6">
+                <a href="/gallery" class="block py-2 hover:text-yellow-300 ">📸 ภาพประกอบกิจกรรม</a>
+                <a href="/activity_schedule" class="block py-2 hover:text-yellow-300 bg-white/10">🗓️ ตารางกิจกรรม</a>
+                <a href="/club_organization_chart" class="block py-2 hover:text-yellow-300">🗓️ ผังองค์กรชมรม</a>
+            </div>
+        </div>
+
+        <a href="/announcements" class="px-3 py-2 rounded-lg hover:bg-white/10 ">
+            📣 ประชาสัมพันธ์
+        </a>
+
+    </nav>
+</div>
+    <header class=" p-4 sticky top-0 z-40">
+        <div class="max-w-6xl mx-auto">
+            <a href="/activity_schedule"
+               class="inline-flex items-center space-x-2 px-4 py-2 bg-white/25 text-white text-base font-medium rounded-full backdrop-blur-sm hover:bg-white/40 transition duration-300 shadow-lg">
+                <span class="text-xl" style="color: #2d32c7;">←</span>
+                <span style="color: #2d32c7; font-weight: bolder;">กลับสู่ตารางกิจกรรม</span>
+            </a>
+        </div>
+    </header>
+
+    <section class="max-w-4xl mx-auto text-center mt-12 mb-12 px-4">
+        <h1 class="text-5xl font-extrabold tracking-tight bg-clip-text text-transparent  drop-shadow-md"
+            style=" color: #d2391e;">
+            {{ title }}
+        </h1>
+        <br>
+        {% if start_date and end_date %}
+            <p class="text-xl mt-4 text-gray-600 italic">
+                📅 <span class="text-blue-700 font-extrabold">{{ start_date }}</span>
+                --- 
+                
+                <span class="text-yellow-500 font-extrabold">{{ end_date }}</span>
+            </p>
+
+            {% elif start_date %}
+            <p class="text-xl mt-4 text-gray-600" italic>
+                📅 <span class="text-blue-700 font-extrabold">{{ start_date }}</span>
+            </p>
+
+            {% elif end_date %}
+            <p class="text-xl mt-4 text-gray-600 italic">
+                📅 ถึง <span class="text-blue-700 font-extrabold">{{ end_date }}</span>
+            </p>
+
+            {% else %}
+            <p class="text-gray-500 italic mt-4 italic">
+                📅 ยังไม่ระบุวันที่กิจกรรม
+            </p>
+            {% endif %}
+
+
+        {% if desc %}
+        <p class="mt-8 text-gray-800 leading-relaxed bg-white/90 shadow-xl p-8 rounded-3xl border-t-4 border-blue-400/50">
+            {{ desc }}
+        </p>
+        {% endif %}
+    </section>
+
+    <section class="max-w-6xl mx-auto px-4 mb-24">
+        <h2 class="text-3xl font-bold mb-6 text-blue-900 border-b-2 border-red-300 pb-2 inline-block">📸 ภาพกิจกรรม</h2>
+
+        {% if images %}
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+            {% for img in images %}
+            <div onclick="openModal('/static/gallery/{{ folder }}/{{ img }}')"
+                 class="gallery-img-wrapper cursor-pointer rounded-2xl overflow-hidden bg-white shadow-xl transition duration-300 ease-in-out hover:shadow-2xl">
+                <img src="/static/gallery/{{ folder }}/{{ img }}" 
+                     alt="ภาพกิจกรรม {{ loop.index }}"
+                     class="gallery-img w-full h-48 md:h-64 object-cover"> </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="p-10 bg-white/70 rounded-xl shadow-inner text-center">
+            <p class="text-2xl text-gray-500 italic">✨ ยังไม่มีภาพแนบในกิจกรรมนี้</p>
+        </div>
+        {% endif %}
+    </section>
+
+    <div id="imgModal"
+        class="fixed inset-0 hidden items-center justify-center z-[999] bg-black/90 backdrop-blur-md transition-opacity duration-300 ease-in-out">
+
+        <button onclick="closeModal()"
+            class="absolute top-4 right-6 md:top-6 md:right-8 text-white text-5xl font-thin opacity-80 hover:opacity-100 transition duration-200 focus:outline-none focus:ring-4 ring-white/30 rounded-full p-2">
+            &times;
+        </button>
+
+        <div class="flex items-center justify-center w-full h-full p-4 md:p-8">
+            <img id="modalImg"
+                alt="ภาพขยาย"
+                class="max-h-[90vh] max-w-[95vw] lg:max-w-[85vw] rounded-xl shadow-2xl border-4 border-white/90 transform transition duration-300 ease-in-out" />
+        </div>
+
+        <button onclick="prevImg()"
+            class="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 text-white text-6xl font-light opacity-60 hover:opacity-100 hover:scale-110 transition duration-200 focus:outline-none p-3 rounded-full hover:bg-white/10">
+            &#10094;
+        </button>
+
+        <button onclick="nextImg()"
+            class="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 text-white text-6xl font-light opacity-60 hover:opacity-100 hover:scale-110 transition duration-200 focus:outline-none p-3 rounded-full hover:bg-white/10">
+            &#10095;
+        </button>
+    </div>
+
+    <footer class="mt-auto text-white text-sm"
+        style="background:linear-gradient(90deg,var(--blue),var(--red))">
+    <div class="max-w-6xl mx-auto px-4 py-6 text-center space-y-3">
+
+        <p class="opacity-90">ติดตามข่าวสารชมรม MSD ได้ที่</p>
+
+        <!-- Social Icons -->
+        <div class="flex justify-center gap-6 text-2xl">
+            <a href="https://www.facebook.com/profile.php?id=100095105160653" class="social-icon hover:text-yellow-300 transition" aria-label="Facebook">
+                <i class="fa-brands fa-facebook"></i>
+            </a>
+            <a href="https://www.instagram.com/msd.nu/" class="social-icon hover:text-yellow-300 transition" aria-label="Instagram">
+                <i class="fa-brands fa-instagram"></i>
+            </a>
+            <a href="https://www.tiktok.com/@msd.nu.official?is_from_webapp=1&sender_device=pc" class="social-icon hover:text-yellow-300 transition" aria-label="TikTok">
+                <i class="fa-brands fa-tiktok"></i>
+            </a>
+        </div>
+
+        <div>
+            © <span id="y"></span> MSD Club — Math • Stat • Data Science
+        </div>
+    </div>
+</footer>
+    <script>
+    let currentIndex = 0;
+    const modal = document.getElementById("imgModal");
+    const modalImg = document.getElementById("modalImg");
+
+    // 1. เก็บ src ของรูปทั้งหมดอย่างถูกต้อง
+    // *รอให้ DOM โหลดเสร็จก่อน*
+    let imageList = [];
+    document.addEventListener('DOMContentLoaded', () => {
+        imageList = [...document.querySelectorAll('.gallery-img')].map(e => e.src);
+    });
+
+    function normalizeUrl(url) {
+        if (!url) return '';
+        try {
+            // สร้าง URL โดยใช้ origin ปัจจุบัน เพื่อให้เปรียบเทียบได้ง่าย
+            return new URL(url, window.location.origin).href;
+        } catch {
+            return url;
+        }
+    }
+
+    // 2. ฟังก์ชันเปิด Modal พร้อมแอนิเมชัน
+    function openModal(imgUrl) {
+        if (imageList.length === 0) return;
+
+        // หา Index ของรูปที่ถูกคลิก
+        const normalizedImgUrl = normalizeUrl(imgUrl);
+        currentIndex = imageList.map(normalizeUrl).indexOf(normalizedImgUrl);
+
+        if (currentIndex === -1) {
+            console.error("Image URL not found in list:", imgUrl);
+            return;
+        }
+
+        // เตรียม Modal สำหรับ Transition
+        modal.classList.remove("hidden", "is-closing");
+        modal.classList.add("is-opening");
+        document.body.style.overflow = "hidden"; // ป้องกัน Scroll ด้านหลัง
+
+        // ตั้งค่ารูปภาพและให้มี Transition เข้า
+        modalImg.src = imgUrl;
+        modalImg.classList.add("is-loading"); // เริ่มต้นด้วยสถานะโหลด
+
+        // หลังจาก 50ms ให้เริ่มแอนิเมชัน Fade-in
+        setTimeout(() => {
+            modal.classList.remove("is-opening");
+            modalImg.classList.remove("scale-95");
+        }, 50);
+
+        // เมื่อโหลดรูปภาพเสร็จ ให้เอาสถานะโหลดออก
+        modalImg.onload = () => {
+            modalImg.classList.remove("is-loading");
+        };
+        modalImg.onerror = () => {
+            console.error("Failed to load modal image:", imgUrl);
+            modalImg.classList.remove("is-loading");
+            // อาจแสดงข้อความ Error แทน
+        };
+    }
+
+    // 3. ฟังก์ชันอัพเดทรูปภาพ (มี Crossfade)
+    function updateModalImg() {
+        // เริ่ม Crossfade
+        modalImg.classList.add("is-loading");
+
+        setTimeout(() => {
+            modalImg.src = imageList[currentIndex];
+            // เมื่อโหลดเสร็จ onload จะจัดการเอา is-loading ออก
+        }, 300); // 300ms ให้ตรงกับ Transition
+
+        // หากรูปถูก Cache ไว้แล้ว (โหลดเร็วมาก) อาจต้องจัดการให้ Crossfade ดูดีขึ้น
+        if (modalImg.complete && modalImg.src === imageList[currentIndex]) {
+             modalImg.classList.remove("is-loading");
+        }
+    }
+
+    function nextImg() {
+        if (imageList.length <= 1) return;
+        currentIndex = (currentIndex + 1) % imageList.length;
+        updateModalImg();
+    }
+
+    function prevImg() {
+        if (imageList.length <= 1) return;
+        currentIndex = (currentIndex - 1 + imageList.length) % imageList.length;
+        updateModalImg();
+    }
+
+    // 4. ฟังก์ชันปิด Modal พร้อมแอนิเมชัน
+    function closeModal() {
+        modal.classList.add("is-closing");
+        modalImg.classList.add("scale-95");
+
+        // ซ่อน Modal เมื่อ Transition เสร็จสิ้น (300ms)
+        setTimeout(() => {
+            modal.classList.add("hidden");
+            modal.classList.remove("is-closing");
+            document.body.style.overflow = "auto";
+        }, 300);
+    }
+
+    // Keyboard controls
+    document.addEventListener("keydown", (e) => {
+        if (modal.classList.contains("hidden")) return;
+        if (e.key === "Escape") closeModal();
+        if (e.key === "ArrowRight") nextImg();
+        if (e.key === "ArrowLeft") prevImg();
+    });
+
+    // Click outside modal image to close
+    modal.addEventListener("click", (e) => {
+        if (e.target.id === "imgModal") closeModal();
+    });
+    document.getElementById('menuBtn').onclick = () => {
+            mobileMenu.style.transform = "translateX(0)";
+        };
+        document.getElementById('closeMenu').onclick = () => {
+            mobileMenu.style.transform = "translateX(100%)";
+        };
+
+        // Dropdown logic
+        document.querySelectorAll(".dropdownBtn").forEach((btn, index) => {
+            btn.onclick = () => {
+                const content = btn.nextElementSibling;
+                const arrow = btn.querySelector(".arrow");
+
+                const isOpen = content.style.maxHeight && content.style.maxHeight !== "0px";
+
+                if (isOpen) {
+                    content.style.maxHeight = "0px";
+                    arrow.style.transform = "rotate(0deg)";
+                } else {
+                    content.style.maxHeight = content.scrollHeight + "px";
+                    arrow.style.transform = "rotate(180deg)";
+                }
+            };
+        });
+</script>
+</body>
+</html>

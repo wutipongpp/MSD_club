@@ -6,6 +6,11 @@
     <title>MSD Club — นิสิตเก่า</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" href="/static/picture/MSD.jpg">
+    <link rel="stylesheet" href="/static/css/section.css">
+    <link rel="stylesheet" href="/static/css/nav.css">
+    <link rel="stylesheet" href="/static/css/footer.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    
     <style>
         :root {
         --red:#c70707;
@@ -22,161 +27,204 @@
         main {
         flex: 1; /* ดัน footer ลงล่าง */
         }
+        
     </style>
     </head>
 
     <body class="text-slate-900 bg-[var(--bg)]">
 
-    <!-- ✅ HEADER -->
-    <header class="sticky top-0 z-50 border-b text-white"
+        <!-- ===============================
+        DESKTOP NAV
+    ================================= -->
+    <header class="hidden md:block sticky top-0 z-50 border-b text-white"
             style="background:linear-gradient(90deg,var(--red),var(--blue))">
-        <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+    <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+
+        <!-- Logo -->
         <a href="/" class="flex items-center gap-3">
-            <span class="w-10 h-10 rounded-xl overflow-hidden">
-            <img src="/static/picture/MSD.jpg" alt="icon" class="w-full h-full object-cover">
-            </span>
-            <div class="hidden md:block">
+        <span class="w-10 h-10 rounded-xl overflow-hidden">
+            <img src="/static/picture/MSD.jpg" class="w-full h-full object-cover">
+        </span>
+        <div>
             <div class="text-lg font-extrabold tracking-wide">MSD Club</div>
             <div class="text-xs opacity-90">Math · Stat · Data Science</div>
+        </div>
+        </a>
+
+        <!-- Menu -->
+        <nav class="flex gap-1 items-center relative">
+
+        <a class="px-3 py-2 rounded-lg hover:bg-white/10 " href="/">หน้าหลัก</a>
+
+        <a class="px-3 py-2 rounded-lg hover:bg-white/10 bg-white/10" href="/alumni">นิสิตเก่า</a>
+
+          <!-- Dropdown -->
+        <div class="relative group">
+            <button class="px-3 py-2 rounded-lg hover:bg-white/10  flex items-center gap-1">
+                เกี่ยวกับ MSD ▾
+            </button>
+
+            <div class="absolute left-0 mt-2 w-56 rounded-xl shadow-lg py-2
+                        opacity-0 invisible group-hover:visible group-hover:opacity-100 
+                        transition-all duration-300 transform group-hover:translate-y-0 -translate-y-2"
+                style="
+                    background: linear-gradient(100deg, rgba(140, 45, 199, 0.95), rgba(36, 17, 180, 0.95));
+                    backdrop-filter: width(80px);
+                ">
+
+                <a href="/gallery" 
+                class="block px-4 py-2 text-white/90 hover:bg-white/10 hover:text-white rounded-lg transition">
+                    📸 ภาพประกอบกิจกรรม
+                </a>
+
+                <a href="/activity_schedule" 
+                class="block px-4 py-2 text-white/90 hover:bg-white/10 hover:text-white rounded-lg transition">
+                    🗓️ ตารางกิจกรรม
+                </a>
+
+                <div class="border-t border-white/20 my-1"></div>
+
+                <a href="/club_organization_chart" 
+                class="block px-4 py-2 text-white/90 hover:bg-white/10 hover:text-white rounded-lg transition">
+                    🗓️  ผังองค์กรชมรม
+                </a>
+
+            </div>
+        </div>
+
+        <a class="px-3 py-2 rounded-lg hover:bg-white/10" href="/announcements">ประชาสัมพันธ์</a>
+        </nav>
+    </div>
+    </header>
+
+
+
+
+               <!-- ===============================
+        MOBILE HEADER
+================================= -->
+<header class="md:hidden sticky top-0 z-50 border-b text-white"
+        style="background:linear-gradient(90deg,var(--red),var(--blue))">
+    <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+
+        <a href="/" class="flex items-center gap-3">
+            <span class="w-10 h-10 rounded-xl overflow-hidden shadow-md">
+                <img src="/static/picture/MSD.jpg" class="w-full h-full object-cover">
+            </span>
+            <div>
+                <div class="text-lg font-extrabold tracking-wide">MSD Club</div>
+                <div class="text-xs opacity-90">Math · Stat · Data Science</div>
             </div>
         </a>
-        <nav class="flex gap-1">
-            <a class="px-3 py-2 rounded-lg hover:bg-white/10" href="/">หน้าหลัก</a>
-            <a class="px-3 py-2 rounded-lg bg-white/10" href="/alumni">นิสิตเก่า</a>
-            <a class="px-3 py-2 rounded-lg hover:bg-white/10" href="/announcements">ประชาสัมพันธ์</a>
-        </nav>
+
+        <button id="menuBtn"
+                class="text-3xl p-2 rounded-lg active:scale-90 
+                       hover:bg-white/20 transition">
+            ☰
+        </button>
+    </div>
+</header>
+
+<!-- ===============================
+     NEW MOBILE OFFCANVAS MENU
+================================= -->
+<div id="mobileMenu"
+     class="fixed top-0 right-0 w-72 h-full z-[10000]
+            translate-x-full transition-transform duration-300
+            flex flex-col bg-gradient-to-b 
+            from-[var(--red)] to-[var(--blue)]
+            text-white shadow-[0_0_30px_rgba(0,0,0,0.45)] md:hidden">
+
+    <button id="closeMenu"
+            class="self-end text-4xl px-4 py-3 
+                   text-white hover:text-yellow-300 transition">
+        &times;
+    </button>
+
+    <!-- PROFILE HEADER -->
+    <div class="px-6 py-3 mb-3 flex items-center gap-3">
+        <span class="w-12 h-12 rounded-xl overflow-hidden shadow-lg border border-white/20">
+            <img src="/static/picture/MSD.jpg" class="w-full h-full object-cover">
+        </span>
+        <div>
+            <div class="text-xl font-extrabold drop-shadow">MSD Club Menu</div>
+            <div class="text-white/80 text-sm -mt-1">Math • Stat • Data Science</div>
         </div>
-    </header>
+    </div>
+
+    <nav class="flex flex-col gap-2 px-4">
+
+        <a href="/" class="px-3 py-2 rounded-lg hover:bg-white/10">
+            🏠 หน้าหลัก
+        </a>
+
+        <a href="/alumni" class="px-3 py-2 rounded-lg hover:bg-white/10 bg-white/10">
+            🎓 นิสิตเก่า
+        </a>
+
+        <!-- Dropdown (improved) -->
+        <div class="w-full">
+            <button class="dropdownBtn w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-white/10 ">
+                <span>📁 เกี่ยวกับ MSD</span>
+                <span class="arrow transition-transform">▾</span>
+            </button>
+
+            <div class="dropdownContent max-h-0 overflow-hidden transition-all duration-300 pl-6">
+                <a href="/gallery" class="block py-2 hover:text-yellow-300 ">📸 ภาพประกอบกิจกรรม</a>
+                <a href="/activity_schedule" class="block py-2 hover:text-yellow-300">🗓️ ตารางกิจกรรม</a>
+                <a href="/club_organization_chart" class="block py-2 hover:text-yellow-300">🗓️ ผังองค์กรชมรม</a>
+            </div>
+        </div>
+
+        <a href="/announcements" class="px-3 py-2 rounded-lg hover:bg-white/10">
+            📣 ประชาสัมพันธ์
+        </a>
+
+    </nav>
+</div>
 
     <!-- ✅ MAIN -->
     <main class="flex-grow max-w-6xl mx-auto px-4 py-10 w-full">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
         <h2 class="text-3xl font-extrabold text-blue-950">นิสิตเก่า (Alumni)</h2>
-        <input id="q" placeholder="ค้นหารุ่น เช่น 2019"
+        <input id="q" placeholder="ค้นหารุ่น เช่น 65"
                 class="px-4 py-2 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-300 transition" />
         </div>
-
-        <div id="batchGrid" class="grid md:grid-cols-4 sm:grid-cols-2 gap-4"></div>
-
+        <div class="section">
+            <div id="batchGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"></div>
+        </div>
         <h3 class="text-2xl font-bold text-blue-950 mt-10 border-b-2 border-blue-200 pb-1">
         รายชื่อในรุ่น <span id="batchTitle" class="text-red-600"></span>
         </h3>
         <div id="peopleGrid" class="grid md:grid-cols-3 sm:grid-cols-2 gap-5 mt-5"></div>
     </main>
 
-    <!-- ✅ FOOTER (ติดล่างเสมอ) -->
-    <footer class="text-white text-sm mt-auto"
-            style="background:linear-gradient(90deg,var(--blue),var(--red))">
-        <div class="max-w-6xl mx-auto px-4 py-6 text-center">
-        © <span id="y"></span> MSD Club
+    <footer class="mt-auto text-white text-sm"
+        style="background:linear-gradient(90deg,var(--blue),var(--red))">
+    <div class="max-w-6xl mx-auto px-4 py-6 text-center space-y-3">
+
+        <p class="opacity-90">ติดตามข่าวสารชมรม MSD ได้ที่</p>
+
+        <!-- Social Icons -->
+        <div class="flex justify-center gap-6 text-2xl">
+            <a href="https://www.facebook.com/profile.php?id=100095105160653" class="social-icon hover:text-yellow-300 transition" aria-label="Facebook">
+                <i class="fa-brands fa-facebook"></i>
+            </a>
+            <a href="https://www.instagram.com/msd.nu/" class="social-icon hover:text-yellow-300 transition" aria-label="Instagram">
+                <i class="fa-brands fa-instagram"></i>
+            </a>
+            <a href="https://www.tiktok.com/@msd.nu.official?is_from_webapp=1&sender_device=pc" class="social-icon hover:text-yellow-300 transition" aria-label="TikTok">
+                <i class="fa-brands fa-tiktok"></i>
+            </a>
         </div>
-    </footer>
 
-    <script>
-        const batchGrid = document.getElementById('batchGrid');
-        const peopleGrid = document.getElementById('peopleGrid');
-        const batchTitle = document.getElementById('batchTitle');
-        const q = document.getElementById('q');
+        <div>
+            © <span id="y"></span> MSD Club — Math • Stat • Data Science
+        </div>
+    </div>
+</footer>
 
-        let allBatches = [];
-        let allAlumni = [];
-        let selectedBatch = null;
-
-        async function loadData() {
-        try {
-            const [batchesRes, alumniRes] = await Promise.all([
-            fetch('/api/alumni/batches'),
-            fetch('/api/alumni/people')
-            ]);
-            allBatches = await batchesRes.json();
-            allAlumni = await alumniRes.json();
-            renderBatches(allBatches);
-        } catch (err) {
-            console.error('❌ โหลดข้อมูลไม่สำเร็จ:', err);
-        }
-        }
-
-        function renderBatches(list = allBatches) {
-        batchGrid.innerHTML = '';
-        if (!list.length) {
-            batchGrid.innerHTML = `<div class="col-span-full text-center text-gray-500">ยังไม่มีข้อมูลรุ่น</div>`;
-            return;
-        }
-
-        list.forEach(year => {
-            const count = allAlumni.filter(a => a.batch_year === year).length;
-            const card = document.createElement('div');
-            card.className = `
-            rounded-2xl border border-gray-200 shadow bg-white p-5 hover:shadow-xl cursor-pointer transition-all duration-300
-            ${selectedBatch === year ? 'scale-105 ring-4 ring-yellow-400' : ''}
-            `;
-            card.innerHTML = `
-            <div class="aspect-[4/3] bg-gradient-to-br ${selectedBatch===year?'from-yellow-200 to-red-200':'from-red-100 to-yellow-100'} rounded-xl flex items-center justify-center mb-3 transition-all">
-                <div class="text-3xl font-bold ${selectedBatch===year?'text-blue-900 text-4xl':'text-red-600'}">${year}</div>
-            </div>
-            <div class="font-bold text-blue-950">รุ่นปี ${year}</div>
-            <div class="text-sm text-gray-500">${count} คน</div>
-            `;
-            card.addEventListener('click', () => {
-            selectedBatch = year;
-            renderBatches();
-            renderPeople(year);
-            document.getElementById('peopleGrid').scrollIntoView({ behavior: 'smooth' });
-            });
-            batchGrid.appendChild(card);
-        });
-        }
-
-        function renderPeople(batch) {
-        batchTitle.textContent = batch;
-        const list = allAlumni.filter(a => a.batch_year === batch);
-        peopleGrid.innerHTML = '';
-
-        if (!list.length) {
-            peopleGrid.innerHTML = `<div class="col-span-full text-center text-gray-500">ยังไม่มีสมาชิกในรุ่นนี้</div>`;
-            return;
-        }
-
-        list.forEach(p => {
-            const card = document.createElement('div');
-            card.className = 'rounded-2xl border border-gray-200 shadow p-4 bg-white hover:shadow-xl transition';
-            card.innerHTML = `
-            <div class="flex items-center gap-3 cursor-pointer" onclick="viewProfile('${p.student_id || p.id}')">
-                <img src="${p.image || '/static/alumni_photos/default.jpg'}"
-                    class="w-14 h-14 rounded-full object-cover bg-gray-100">
-                <div>
-                <div class="font-bold text-blue-950">${p.name}</div>
-                <div class="text-sm text-gray-600">${p.student_id || '-'} | ${p.contact || ''}</div>
-                </div>
-            </div>
-            <div class="mt-3 text-sm text-gray-500 italic">“${p.quote || ''}”</div>
-            `;
-            peopleGrid.appendChild(card);
-        });
-        }
-
-        q.addEventListener('input', () => {
-        const keyword = q.value.trim();
-        const filtered = allBatches.filter(y => y.includes(keyword));
-        renderBatches(filtered);
-        });
-
-        function viewProfile(id) {
-        window.location.href = `/alumni/profile/${id}`;
-        }
-
-        document.getElementById('y').textContent = new Date().getFullYear();
-        loadData();
-
-        const isAdmin = JSON.parse(localStorage.getItem('msd:isAdmin') || 'false');
-        if (isAdmin) {
-        const nav = document.querySelector('nav');
-        const adminLink = document.createElement('a');
-        adminLink.href = "/admin";
-        adminLink.textContent = "⚙️ แอดมิน";
-        adminLink.className = "px-3 py-2 rounded-lg bg-yellow-400 text-blue-950 font-bold hover:bg-yellow-300 transition";
-        nav.appendChild(adminLink);
-        }
-    </script>
+    <script src="/static/js/alumni.js"></script>
+    <script src="/static/js/nav.js"></script>
 </body>
 </html>
